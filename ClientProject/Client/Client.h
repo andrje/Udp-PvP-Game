@@ -34,6 +34,6 @@ private:
 	float				m_framerate;
 
 private:
-	PlayerClient*		m_player_client;
+	PlayerClient*		m_player_local;
 	PlayerServer*		m_player_server;
 };

@@ -6,7 +6,7 @@
 
 
 // static init
-Cpp* PlayerSuper::m_cpp = new Cpp();
+Cpp* PlayerSuper::m_cpp_local = new Cpp();
 
 
 // cTor
@@ -18,8 +18,7 @@ PlayerSuper::PlayerSuper()
 // dTor
 PlayerSuper::~PlayerSuper()
 {
-	SAFE_DEL(m_shape);		SAFE_DEL(m_cpp);
-	SAFE_DEL(m_cpp);
+	SAFE_DEL(m_shape);		SAFE_DEL(m_cpp_local);
 }
 
 
@@ -39,6 +38,9 @@ void PlayerSuper::init_shape(const float radius,
 void PlayerSuper::set_shape_pos(const sf::Vector2f& newPos)
 {
 	m_shape->setPosition(newPos);
+
+	/*std::cout << m_cpp->m_player_pos_other.x << ", "
+		<< m_cpp->m_player_pos_other.y << '\n' << std::endl;*/
 }
 
 
@@ -52,14 +54,14 @@ sf::CircleShape* PlayerSuper::get_shape()
 // get health
 float PlayerSuper::get_health()
 {
-	return m_cpp->m_health_this;
+	return m_cpp_local->m_health_this;
 }
 
 
 // set health
 void PlayerSuper::set_health(const float newHealth)
 {
-	m_cpp->m_health_this = newHealth;
+	m_cpp_local->m_health_this = newHealth;
 }
 
 
@@ -70,17 +72,21 @@ ProjectilesVec& PlayerSuper::get_projectiles_vec()
 }
 
 
-// set packet pos
-void PlayerSuper::update_packet_pos(const sf::Vector2f& newPos)
+// update packet input
+void PlayerSuper::update_packet_input(std::vector<int>& input, const float deltaT)
 {
-	m_cpp->m_player_pos_this += newPos;
+	m_cpp_local->m_input_x = input.at(0);
+	m_cpp_local->m_input_y = input.at(1);
+	m_cpp_local->m_input_m_1 = input.at(2);
+
+	m_cpp_local->m_delta_t = deltaT;
 }
 
 
 // update packet health
 void PlayerSuper::update_packet_health(const float newHealth)
 {
-	m_cpp->m_health_this = newHealth;
+	m_cpp_local->m_health_this = newHealth;
 }
 
 
@@ -90,7 +96,7 @@ void PlayerSuper::send_packet(sf::UdpSocket& socket,
 								const unsigned short serverPort)
 {
 	sf::Packet packet;
-	packet << *m_cpp;
+	packet << *m_cpp_local;
 	//std::cout << "send before" << std::endl;
 	socket.send(packet, serverIP, serverPort);
 	//std::cout << "send after" << '\n' << std::endl;
@@ -106,35 +112,35 @@ void PlayerSuper::receive_packet(sf::UdpSocket& socket)
 	//std::cout << "receive before" << std::endl;
 	socket.receive(packet, sender_IP, sender_port);
 	//std::cout << "receive after" << '\n' << std::endl;
-	packet >> *m_cpp;
+	packet >> *m_cpp_local;
 }
 
 
 // get cpp pos this
 sf::Vector2f PlayerSuper::get_cpp_server_pos_this()
 {
-	return m_cpp->m_player_pos_this;
+	return m_cpp_local->m_player_pos_this;
 }
 
 
 // get cpp pos other
 sf::Vector2f PlayerSuper::get_cpp_server_pos_other()
 {
-	return m_cpp->m_player_pos_other;
+	return m_cpp_local->m_player_pos_other;
 }
 
 
 // get cpp health this
 float PlayerSuper::get_cpp_server_health_this()
 {
-	return m_cpp->m_health_this;
+	return m_cpp_local->m_health_this;
 }
 
 
 // get cpp health other
 float PlayerSuper::get_cpp_server_health_other()
 {
-	return m_cpp->m_health_other;
+	return m_cpp_local->m_health_other;
 }
 
 
@@ -154,5 +160,5 @@ void PlayerSuper::render(sf::RenderWindow& rWin)
 // print packet
 void PlayerSuper::print_packet_struct()
 {
-	std::cout << *m_cpp << std::endl;
+	std::cout << *m_cpp_local << std::endl;
 }

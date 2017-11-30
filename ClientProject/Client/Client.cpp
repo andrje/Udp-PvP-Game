@@ -30,7 +30,7 @@ Client::Client(const std::string& serverIP,
 										sf::Style::Default,
 										AA);
 
-	m_player_client = new PlayerClient();
+	m_player_local = new PlayerClient();
 	m_player_server = new PlayerServer();
 }
 
@@ -45,9 +45,9 @@ sf::Vector2f Client::get_win_size()
 // update
 void Client::update()
 {
-	float deltaT = 0, currentT = 0, lastT = 0, frameT = 0;
+	float delta_t = 0, current_t = 0, last_t = 0, frame_t = 0;
 	m_clock->restart();
-	lastT = m_clock->getElapsedTime().asSeconds();
+	last_t = m_clock->getElapsedTime().asSeconds();
 
 	while (m_render_win->isOpen())
 	{
@@ -58,28 +58,29 @@ void Client::update()
 				m_render_win->close();
 		}
 
-		currentT = m_clock->getElapsedTime().asSeconds();
-		deltaT += currentT - lastT;
+		current_t = m_clock->getElapsedTime().asSeconds();
+		delta_t += current_t - last_t;
 
-		if (currentT - frameT > m_framerate)
+		if (current_t - frame_t > m_framerate)
 		{
 			m_render_win->clear(sf::Color::Cyan);
 
-			m_player_client->update(deltaT,
+			m_player_server->update();
+			m_player_local->update(delta_t,
 									*m_socket, 
 									*m_server_IP,
 									m_server_port,
 									*m_render_win);
-			m_player_server->update();
-			m_player_client->render(*m_render_win);
+
 			m_player_server->render(*m_render_win);
+			m_player_local->render(*m_render_win);
 
 			m_render_win->display();
 
-			frameT = currentT;
-			deltaT = 0;
+			frame_t = current_t;
+			delta_t = 0;
 		}
 
-		lastT = currentT;
+		last_t = current_t;
 	}
 }

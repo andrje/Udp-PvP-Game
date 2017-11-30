@@ -4,16 +4,17 @@
 
 // forward
 #include "../ServerPlayerPacket/ServerPlayerPacket.h"
-#include "../Server/Server.h"
 
 
 // cTor
 ServerClient::ServerClient(const std::string& ip,
 							const unsigned short port,
+							const size_t clientNr,
 							const sf::Vector2f& spawnPosThis,
 							const sf::Vector2f& spawnPosOther)
 	: m_IP(new std::string(ip)),
 	m_port(port),
+	m_client_nr(clientNr),
 	m_spp(new Spp())
 {
 	m_spp->m_player_pos_this = spawnPosThis;
@@ -44,6 +45,13 @@ unsigned short ServerClient::get_port()
 }
 
 
+// get client nr
+size_t ServerClient::get_client_nr()
+{
+	return m_client_nr;
+}
+
+
 // get spp
 Spp* ServerClient::get_spp()
 {
@@ -51,8 +59,15 @@ Spp* ServerClient::get_spp()
 }
 
 
-// init packet
-void ServerClient::init_packet(sf::UdpSocket& socket)
+// receive packet
+void ServerClient::receive_packet(sf::Packet& packet)
+{
+	packet >> *m_spp;
+}
+
+
+// send packet
+void ServerClient::send_packet(sf::UdpSocket& socket)
 {
 	sf::Packet packet;
 	packet << *m_spp;
@@ -62,23 +77,23 @@ void ServerClient::init_packet(sf::UdpSocket& socket)
 }
 
 
-// set packet
-void ServerClient::set_packet(sf::Packet& packet)
-{
-	packet >> *m_spp;
-
-	//std::cout << *m_spp << std::endl;
-}
-
-
 // get apcket
 sf::Packet ServerClient::get_packet()
 {
 	sf::Packet packet;
 	packet << *m_spp;
 
-	//std::cout << *m_spp << std::endl;
-
 	return packet;
 }
 
+void ServerClient::update()
+{
+	sf::Vector2f tmp_pos;
+	tmp_pos.x = m_spp->m_input_x;
+	tmp_pos.y = m_spp->m_input_y;
+
+	if (tmp_pos.x != 0 && tmp_pos.y != 0)
+		tmp_pos /= std::sqrt(tmp_pos.x * tmp_pos.x + tmp_pos.y * tmp_pos.y);
+
+	m_spp->m_player_pos_this += tmp_pos * SPEED_BASE * m_spp->m_delta_t;
+}

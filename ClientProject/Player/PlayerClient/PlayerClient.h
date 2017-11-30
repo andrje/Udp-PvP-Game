@@ -10,7 +10,7 @@ class PlayerClient : public PlayerSuper
 public:
 	PlayerClient();
 
-	void		move(const float deltaT, sf::RenderWindow& rWin);
+	void		move(const float deltaT);
 	void		shoot(sf::RenderWindow& rWin);
 
 
@@ -21,5 +21,7 @@ public:
 						sf::RenderWindow& rWin);
 
 private:
+	std::vector<int>	m_input;
+
 	bool				m_is_shooting;
 };

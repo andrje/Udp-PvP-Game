@@ -20,9 +20,12 @@ public:
 	std::string*	m_client_IP;
 	unsigned short	m_client_port;
 
+	int				m_input_x, m_input_y, m_input_m_1;
+
 	sf::Vector2f	m_player_pos_this,
 					m_player_pos_other;
-	float			m_health_this,
+	float			m_delta_t,
+					m_health_this,
 					m_health_other;
 
 	//std::vector<Bullets*>	m_v_bullets;

@@ -19,11 +19,11 @@ public:
 		const unsigned short serverPort = 50000);
 	~Server();
 
-	void	init_connect();
 	void	recieve_packets();
 	void	update_packets();
 	void	send_packets();
-	void	update();
+	void	init_connect();
+	void	run_connect();
 	void	run();
 
 private:
@@ -31,5 +31,10 @@ private:
 	std::string*		m_server_IP;
 	unsigned short		m_server_port;
 
+	size_t				m_nr_clients_connected;
+
 	ClientMap			m_client_map;
+
+	sf::Clock*			m_clock;
+	float				m_tickrate;
 };

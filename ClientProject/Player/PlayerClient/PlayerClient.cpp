@@ -13,29 +13,31 @@ PlayerClient::PlayerClient()
 	: m_is_shooting(false)
 {
 	init_shape(30, 4, sf::Color::Magenta);
+
+	for (size_t i = 0; i < 3; i++)
+		m_input.push_back(0);
 }
 
 
 // input
-void PlayerClient::move(const float deltaT, sf::RenderWindow& rWin)
+void PlayerClient::move(const float deltaT)
 {
-	sf::Vector2f tmp_pos(0, 0);
+	for (size_t i = 0; i < 3; i++)
+		m_input.at(i) = 0;
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		tmp_pos.x = -1;
+		m_input.at(0) = -1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		tmp_pos.x = 1;
+		m_input.at(0) = 1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		tmp_pos.y = -1;
+		m_input.at(1) = -1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		tmp_pos.y = 1;
+		m_input.at(1) = 1;
 
-	if (tmp_pos.x != 0 && tmp_pos.y != 0)
-		tmp_pos /= std::sqrt(tmp_pos.x * tmp_pos.x +
-							tmp_pos.y * tmp_pos.y);
+	if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		m_input.at(2) = 1;
 
-	tmp_pos *= SPEED_BASE * deltaT;
-	update_packet_pos(tmp_pos);
+	update_packet_input(m_input, deltaT);
 }
 
 
@@ -69,7 +71,7 @@ void PlayerClient::update(const float deltaT,
 							sf::RenderWindow& rWin)
 {
 	// input
-	move(deltaT, rWin);
+	move(deltaT);
 	// shoot TEST
 	shoot(rWin);
 

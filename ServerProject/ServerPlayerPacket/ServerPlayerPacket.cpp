@@ -9,7 +9,12 @@ ServerPlayerPacket::ServerPlayerPacket()
 	m_health_other(0),
 	m_client_IP(new std::string(" ")),
 	m_client_port(0)
-{}
+{
+	m_input_x = 0;
+	m_input_y = 0;
+	m_input_m_1 = 0;
+	m_delta_t = 0;
+}
 
 
 // dTor
@@ -59,5 +64,7 @@ sf::Packet& operator<<(sf::Packet& p, const ServerPlayerPacket& cpp)
 // receive packet
 sf::Packet& operator>>(sf::Packet& p, ServerPlayerPacket& cpp)
 {
-	return p >> cpp.m_player_pos_this.x >> cpp.m_player_pos_this.y >> cpp.m_health_this;
+	//return p >> cpp.m_player_pos_this.x >> cpp.m_player_pos_this.y >> cpp.m_health_this;
+
+	return p >> cpp.m_input_x >> cpp.m_input_y >> cpp.m_input_m_1 >> cpp.m_delta_t << cpp.m_health_this;
 }

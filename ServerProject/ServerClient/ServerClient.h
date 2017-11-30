@@ -9,31 +9,40 @@
 #define SAFE_DEL(x) delete x; x = nullptr;
 
 struct ServerPlayerPacket;
-class ServerClient;
 
 using Spp = ServerPlayerPacket;
-using ClientMap = std::map<unsigned short, ServerClient*>;
+
+const float SPEED_BASE = 350;
+const float SPEED_DASH = SPEED_BASE * 1.5;
+const float SPEED_MAX = SPEED_BASE * SPEED_DASH;
+
 
 class ServerClient
 {
 public:
 	ServerClient(const std::string& ip,
 				const unsigned short port,
+				const size_t clientNr,
 				const sf::Vector2f& spawnPosThis,
 				const sf::Vector2f& spawnPosOther);
 	~ServerClient();
 
 	std::string*	get_IP();
 	unsigned short	get_port();
+	size_t			get_client_nr();
 	Spp*			get_spp();
 
-	void			init_packet(sf::UdpSocket& socket);
-	void			set_packet(sf::Packet& packet);
+	void			receive_packet(sf::Packet& packet);
+	void			send_packet(sf::UdpSocket& socket);
 	sf::Packet		get_packet();
+
+	void			update();
 
 private:
 	std::string*	m_IP;
 	unsigned short	m_port;
+
+	size_t			m_client_nr;
 
 	Spp*			m_spp;
 };

@@ -7,11 +7,16 @@ ClientPlayerPacket::ClientPlayerPacket()
 	m_player_pos_other(-100, -100),
 	m_health_this(100),
 	m_health_other(100)
-{}
+{
+	m_input_x = 0;
+	m_input_y = 0;
+	m_input_m_1 = 0;
+	m_delta_t = 0;
+}
 
 
 // ostream
-std::ostream & operator<<(std::ostream & out, const ClientPlayerPacket & cpp)
+std::ostream& operator<<(std::ostream& out, const ClientPlayerPacket& cpp)
 {
 	return out << "This: " << '(' <<
 						cpp.m_player_pos_this.x << ", " <<
@@ -27,7 +32,9 @@ std::ostream & operator<<(std::ostream & out, const ClientPlayerPacket & cpp)
 // send packet
 sf::Packet& operator<<(sf::Packet& p, const ClientPlayerPacket& cpp)
 {
-	return p << cpp.m_player_pos_this.x << cpp.m_player_pos_this.y << cpp.m_health_this;
+	//return p << cpp.m_player_pos_this.x << cpp.m_player_pos_this.y << cpp.m_health_this;
+	
+	return p << cpp.m_input_x << cpp.m_input_y << cpp.m_input_m_1 << cpp.m_delta_t << cpp.m_health_this;
 }
 
 

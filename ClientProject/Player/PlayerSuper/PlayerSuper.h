@@ -37,7 +37,7 @@ public:
 	float				get_health();
 	void				set_health(const float newHealth);
 	ProjectilesVec&		get_projectiles_vec();
-	void				update_packet_pos(const sf::Vector2f& newPos);
+	void				update_packet_input(std::vector<int>& input, const float deltaT);
 	void				update_packet_health(const float newHealth);
 	void				send_packet(sf::UdpSocket& socket,
 									const std::string& serverIP,
@@ -57,5 +57,5 @@ protected:
 	sf::CircleShape*	m_shape;
 
 	ProjectilesVec		m_projectiles_vec;
-	static Cpp*			m_cpp;
+	static Cpp*			m_cpp_local;
 };
