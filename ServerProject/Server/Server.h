@@ -32,4 +32,6 @@ private:
 	unsigned short		m_server_port;
 
 	ClientMap			m_client_map;
+
+	float git_pos;
 };
