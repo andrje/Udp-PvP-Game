@@ -48,7 +48,6 @@ void PlayerClient::shoot(sf::RenderWindow& rWin)
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_is_shooting)
 	{
 		//m_is_shooting = true;
-
 		sf::Vector2i mouse_pos = sf::Mouse::getPosition(rWin);
 
 		Projectile* projectile = new Projectile(get_cpp_server_pos_this(),
