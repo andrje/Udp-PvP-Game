@@ -77,15 +77,7 @@ void ServerClient::send_packet(sf::UdpSocket& socket)
 }
 
 
-// get apcket
-sf::Packet ServerClient::get_packet()
-{
-	sf::Packet packet;
-	packet << *m_spp;
-
-	return packet;
-}
-
+// update
 void ServerClient::update()
 {
 	sf::Vector2f tmp_pos;

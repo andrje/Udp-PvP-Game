@@ -4,7 +4,7 @@
 
 // forward
 #include "../ServerClient/ServerClient.h"
-#include "../ServerPlayerPacket/ServerPlayerPacket.h"	// delete later, for testing
+#include "../ServerPlayerPacket/ServerPlayerPacket.h"
 
 
 // cTor
@@ -14,7 +14,7 @@ Server::Server(const std::string & serverIP,
 	m_server_IP(new std::string(serverIP)),
 	m_server_port(serverPort),
 	m_nr_clients_connected(0),
-	m_tickrate(0.0166),	// about 60 ticks per sec
+	m_tickrate(0.0083),
 	m_clock(new sf::Clock())
 {
 	m_socket->bind(m_server_port);
@@ -160,8 +160,6 @@ void Server::run_connect()
 			send_packets();
 
 			tick_t = current_t;
-
-			std::cout << current_t - tick_t << std::endl;
 		}
 	}
 }

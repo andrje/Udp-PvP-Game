@@ -25,20 +25,6 @@ ServerPlayerPacket::~ServerPlayerPacket()
 }
 
 
-// set player pos other
-void ServerPlayerPacket::set_player_pos_other(const sf::Vector2f & newPos)
-{
-	m_player_pos_other = newPos;
-}
-
-
-// set player health other
-void ServerPlayerPacket::set_player_health_other(const float newHealth)
-{
-	m_health_other = newHealth;
-}
-
-
 // ostream
 std::ostream& operator<<(std::ostream& out, const ServerPlayerPacket& cpp)
 {

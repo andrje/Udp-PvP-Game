@@ -8,10 +8,11 @@
 
 #define SAFE_DEL(x) delete x; x = nullptr;
 
+// forward
 struct ServerPlayerPacket;
-
+// typedef
 using Spp = ServerPlayerPacket;
-
+// const
 const float SPEED_BASE = 350;
 const float SPEED_DASH = SPEED_BASE * 1.5;
 const float SPEED_MAX = SPEED_BASE * SPEED_DASH;
@@ -34,7 +35,6 @@ public:
 
 	void			receive_packet(sf::Packet& packet);
 	void			send_packet(sf::UdpSocket& socket);
-	sf::Packet		get_packet();
 
 	void			update();
 

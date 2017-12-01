@@ -7,8 +7,9 @@
 
 #define SAFE_DEL(x) delete x; x = nullptr;
 
+// forward
 class ServerClient;
-
+// typedef
 using ClientMap = std::map<unsigned short, ServerClient*>;
 
 

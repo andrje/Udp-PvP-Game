@@ -13,9 +13,6 @@ public:
 	ServerPlayerPacket();
 	~ServerPlayerPacket();
 
-	void	set_player_pos_other(const sf::Vector2f& newPos);
-	void	set_player_health_other(const float newHealth);
-
 public:
 	std::string*	m_client_IP;
 	unsigned short	m_client_port;

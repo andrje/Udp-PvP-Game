@@ -17,7 +17,7 @@ Client::Client(const std::string& serverIP,
 	m_win_width(640),
 	m_win_height(360),
 	m_clock(new sf::Clock()),
-	m_framerate(0.0083)	// about 120 fps
+	m_framerate(0.0333)
 {
 	m_socket->bind(sf::Socket::AnyPort);
 	m_socket->setBlocking(true);
@@ -32,13 +32,6 @@ Client::Client(const std::string& serverIP,
 
 	m_player_local = new PlayerClient();
 	m_player_server = new PlayerServer();
-}
-
-
-// get win size
-sf::Vector2f Client::get_win_size()
-{
-	return sf::Vector2f(m_win_width, m_win_height);
 }
 
 

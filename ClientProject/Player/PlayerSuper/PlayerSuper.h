@@ -14,13 +14,9 @@
 // forward
 class Projectile;
 struct ClientPlayerPacket;
-
+// typedef
 using ProjectilesVec = std::vector<Projectile*>;
 using Cpp = ClientPlayerPacket;
-
-const float SPEED_BASE = 350;
-const float SPEED_DASH = SPEED_BASE * 1.5;
-const float SPEED_MAX = SPEED_BASE * SPEED_DASH;
 
 
 class PlayerSuper
@@ -33,12 +29,9 @@ public:
 									const size_t pointCount,
 									const sf::Color& color);
 	void				set_shape_pos(const sf::Vector2f& newPos);
-	sf::CircleShape*	get_shape();
-	float				get_health();
 	void				set_health(const float newHealth);
 	ProjectilesVec&		get_projectiles_vec();
 	void				update_packet_input(std::vector<int>& input, const float deltaT);
-	void				update_packet_health(const float newHealth);
 	void				send_packet(sf::UdpSocket& socket,
 									const std::string& serverIP,
 									const unsigned short serverPort);
@@ -51,11 +44,9 @@ public:
 
 	void				render(sf::RenderWindow& rWin);
 
-	void				print_packet_struct();	//for debug
-
 protected:
 	sf::CircleShape*	m_shape;
 
 	ProjectilesVec		m_projectiles_vec;
-	static Cpp*			m_cpp_local;
+	static Cpp*			m_cpp;
 };

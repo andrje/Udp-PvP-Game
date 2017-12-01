@@ -5,6 +5,7 @@
 #include "SFML/Network.hpp"
 #include "SFML/Graphics.hpp"
 
+// forward
 class PlayerClient;
 class PlayerServer;
 
@@ -14,8 +15,6 @@ class Client
 public:
 	Client(const std::string& serverIP = "127.0.0.1",
 			const unsigned short serverPort = 50000);
-
-	sf::Vector2f	get_win_size();
 
 	void			update();
 
