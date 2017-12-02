@@ -15,7 +15,8 @@ ServerClient::ServerClient(const std::string& ip,
 	: m_IP(new std::string(ip)),
 	m_port(port),
 	m_client_nr(clientNr),
-	m_spp(new Spp())
+	m_spp(new Spp()),
+	m_packet(new sf::Packet())
 {
 	m_spp->m_player_pos_this = spawnPosThis;
 	m_spp->m_player_pos_other = spawnPosOther;
@@ -27,7 +28,7 @@ ServerClient::ServerClient(const std::string& ip,
 // dTor
 ServerClient::~ServerClient()
 {
-	SAFE_DEL(m_IP);		SAFE_DEL(m_spp);
+	SAFE_DEL(m_IP);		SAFE_DEL(m_spp);	SAFE_DEL(m_packet);
 }
 
 
@@ -60,20 +61,19 @@ Spp* ServerClient::get_spp()
 
 
 // receive packet
-void ServerClient::receive_packet(sf::Packet& packet)
+void ServerClient::set_packet(sf::Packet& packet)
 {
 	packet >> *m_spp;
 }
 
 
 // send packet
-void ServerClient::send_packet(sf::UdpSocket& socket)
+sf::Packet* ServerClient::get_packet()
 {
-	sf::Packet packet;
-	packet << *m_spp;
-	//std::cout << "send before" << std::endl;
-	socket.send(packet, *m_IP, m_port);
-	//std::cout << "send after" << '\n' << std::endl;
+	m_packet->clear();
+	*m_packet << *m_spp;
+
+	return m_packet;
 }
 
 

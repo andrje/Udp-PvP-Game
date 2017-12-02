@@ -33,8 +33,8 @@ public:
 	size_t			get_client_nr();
 	Spp*			get_spp();
 
-	void			receive_packet(sf::Packet& packet);
-	void			send_packet(sf::UdpSocket& socket);
+	void			set_packet(sf::Packet& packet);
+	sf::Packet*		get_packet();
 
 	void			update();
 
@@ -45,4 +45,5 @@ private:
 	size_t			m_client_nr;
 
 	Spp*			m_spp;
+	sf::Packet*		m_packet;
 };

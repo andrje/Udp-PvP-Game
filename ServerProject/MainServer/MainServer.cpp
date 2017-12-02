@@ -60,16 +60,16 @@ void socket_receive(sf::Socket::Status& status, sf::Packet& packet, PacketData& 
 
 int main()
 {
-	/*Server server;
-	server.run();*/
+	Server server;
+	server.run();
 
-	sf::UdpSocket socket;
-	socket.bind(50001);
-	socket.setBlocking(false);
+	/*sf::UdpSocket* socket = new sf::UdpSocket();
+	socket->bind(50001);
+	socket->setBlocking(false);
 	sf::IpAddress remote_ip;
 	unsigned short remote_port;
 
-	sf::Socket::Status status;
+	sf::Socket::Status socket_status;
 	sf::Packet p1, p2;
 	PacketData pd;
 
@@ -85,7 +85,7 @@ int main()
 		{
 			isPressed = true;
 			p1 << pd.x1 << pd.y1 << pd.z1;
-			status = socket.send(p1, "127.0.0.1", 50001);
+			socket_status = socket->send(p1, "127.0.0.1", 50001);
 
 			pd.x1 += 3;
 			pd.y1 += 3;
@@ -97,17 +97,13 @@ int main()
 		current_t = clock.getElapsedTime().asSeconds();
 		if (current_t - last_t > tick_r)
 		{
-			socket_send(status, p1);
+			socket_send(socket_status, p1);
 
-			status = socket.receive(p2, remote_ip, remote_port);
-			socket_receive(status, p2, pd);
+			socket_status = socket->receive(p2, remote_ip, remote_port);
+			socket_receive(socket_status, p2, pd);
 			std::cout << pd.x2 << ", " << pd.y2 << ", " << pd.z2 << '\n' << std::endl;
 
 			last_t = current_t;
 		}
-	}
-	
-
-
-	while (true);
+	}*/
 }
