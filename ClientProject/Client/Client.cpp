@@ -27,7 +27,7 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	m_do_frame(false)
 {
 	m_socket->bind(sf::Socket::AnyPort);
-	m_socket->setBlocking(true);
+	m_socket->setBlocking(false);
 	m_client_port = m_socket->getLocalPort();
 
 	sf::ContextSettings AA;
@@ -50,9 +50,17 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 // send packet
 void Client::send_packet()
 {
-	m_socket_status = m_socket->send(*m_player_local->get_packet(),
-									*m_server_IP,
-									m_server_port);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
+		sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+	{
+		m_socket_status = m_socket->send(*m_player_local->get_packet(),
+										*m_server_IP,
+										m_server_port);
+	}
+
+	
 
 	packet_status('s', m_socket_status);	// 's' is key for (s)end messages
 }
@@ -140,14 +148,16 @@ void Client::run()
 		// get if/what to update
 		check_update_time(m_tickrate, m_framerate);
 
-		//// update network
-		//if (m_do_tick)
-		//{
-		//	send_packet();
-		//	receive_packet();
+		// update network
+		//send_packet();
+		
+		/*if (m_do_tick)
+		{
+			send_packet();
+			receive_packet();
 
-		//	m_last_t_tick = m_current_t;
-		//}
+			m_last_t_tick = m_current_t;
+		}*/
 
 		send_packet();
 		receive_packet();
