@@ -19,35 +19,26 @@ using SocketMsg = std::vector<std::string*>;
 class Server
 {
 public:
-	enum SocketStatus
-	{
-		DONE,
-		NOTREADY,
-		DISCONNECTED,
-		ERROR
-	}
-	m_status_type;
-
-public:
-	Server(const std::string& serverIP = "127.0.0.1",
-		const unsigned short serverPort = 50000);
+	Server(const std::string& serverIP = "127.0.0.1", const unsigned short serverPort = 50000);
 	~Server();
 
-	bool	update_tick(const float tickRate);
 	void	recieve_packets();
 	void	update_packets();
 	void	send_packets();
 	void	init_connect();
+	void	socket_handler(const char socketTransferType, sf::Socket::Status& status);
+	bool	update_tick(const float tickRate);
 	void	run_connect();
-	int		socket_status(const char socketTransferType,
-						sf::Socket::Status& status);
 	void	run();
 
 private:
 	sf::UdpSocket*		m_socket;
 	sf::Socket::Status	m_socket_status;
+	sf::Packet*			m_packet;
 	std::string*		m_server_IP;
-	unsigned short		m_server_port;
+	sf::IpAddress*		m_sender_IP;
+	unsigned short		m_server_port,
+						m_sender_port;
 
 	size_t				m_nr_clients_connected;
 

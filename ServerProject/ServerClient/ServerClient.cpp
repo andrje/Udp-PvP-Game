@@ -12,7 +12,8 @@ ServerClient::ServerClient(const std::string& ip,
 							const size_t clientNr,
 							const sf::Vector2f& spawnPosThis,
 							const sf::Vector2f& spawnPosOther)
-	: m_IP(new std::string(ip)),
+	:
+	m_IP(new std::string(ip)),
 	m_port(port),
 	m_client_nr(clientNr),
 	m_spp(new Spp()),
