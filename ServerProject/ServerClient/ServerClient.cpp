@@ -61,20 +61,24 @@ Spp* ServerClient::get_spp()
 }
 
 
-// receive packet
-void ServerClient::set_packet(sf::Packet& packet)
-{
-	packet >> *m_spp;
-}
-
-
 // send packet
 sf::Packet* ServerClient::get_packet()
 {
 	m_packet->clear();
 	*m_packet << *m_spp;
 
+	//std::cout << *m_spp << '\n' << std::endl;
+
 	return m_packet;
+}
+
+
+// receive packet
+void ServerClient::set_packet(sf::Packet& packet)
+{
+	packet >> *m_spp;
+
+	//std::cout << *m_spp << '\n' << std::endl;
 }
 
 

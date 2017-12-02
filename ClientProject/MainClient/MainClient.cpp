@@ -7,5 +7,5 @@
 int main()
 {
 	Client c;
-	c.update();
+	c.run();
 }

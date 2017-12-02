@@ -32,21 +32,24 @@ public:
 	void				set_health(const float newHealth);
 	ProjectilesVec&		get_projectiles_vec();
 	void				update_packet_input(std::vector<int>& input, const float deltaT);
-	void				send_packet(sf::UdpSocket& socket,
-									const std::string& serverIP,
-									const unsigned short serverPort);
-	void				receive_packet(sf::UdpSocket& socket);
 
 	sf::Vector2f		get_cpp_server_pos_this();
 	sf::Vector2f		get_cpp_server_pos_other();
 	float				get_cpp_server_health_this();
 	float				get_cpp_server_health_other();
 
-	void				render(sf::RenderWindow& rWin);
+	sf::Packet*			get_packet();
+	void				set_packet(sf::Packet& packet);
 
+	void				render(sf::RenderWindow& rWin);
+	
 protected:
 	sf::CircleShape*	m_shape;
 
+	sf::Packet*			m_packet;
+
 	ProjectilesVec		m_projectiles_vec;
 	static Cpp*			m_cpp;
+
+	enum Input { HORI, VERT, MOUSE_1 };
 };

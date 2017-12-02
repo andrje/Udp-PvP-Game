@@ -16,11 +16,7 @@ Server::Server(const std::string & serverIP, const unsigned short serverPort)
 	m_sender_IP(new sf::IpAddress("NoIP")),
 	m_server_port(serverPort),
 	m_sender_port(0),
-	m_nr_clients_connected(0),
-	m_tickrate(0.0083), 
-	m_current_t(0),
-	m_last_t(0),
-	m_clock(new sf::Clock())
+	m_nr_clients_connected(0)
 {
 	m_socket->bind(m_server_port);
 	m_socket->setBlocking(true);
@@ -37,7 +33,6 @@ Server::~Server()
 {
 	SAFE_DEL(m_socket);			SAFE_DEL(m_packet);
 	SAFE_DEL(m_server_IP);		SAFE_DEL(m_sender_IP);
-	SAFE_DEL(m_clock);
 
 	auto& itr = m_client_map.begin();
 	if (itr != m_client_map.end())
@@ -54,19 +49,19 @@ Server::~Server()
 
 
 // recieve packets
-void Server::recieve_packets()
+void Server::recieve_packet()
 {
 	m_packet->clear();
 	m_socket_status = m_socket->receive(*m_packet, *m_sender_IP, m_sender_port);
 
-	socket_handler('r', m_socket_status);	// 'r' is key for (r)ecieve messages
+	packet_status('r', m_socket_status);	// 'r' is key for (r)ecieve messages
 }
 
 
 // update packets
-void Server::update_packets()
+void Server::update_packet()
 {
-	for (auto& itr : m_client_map)	// update from player input
+	for (auto& itr : m_client_map)	// update pos, health etc etc
 		itr.second->update();
 
 	for (auto& itr_this : m_client_map)	// copy P1's P1 data to P2's P1 data, and vice versa
@@ -88,7 +83,7 @@ void Server::update_packets()
 
 
 // send packets
-void Server::send_packets()
+void Server::send_packet()
 {
 	for (auto& itr : m_client_map)
 	{
@@ -96,15 +91,55 @@ void Server::send_packets()
 										*itr.second->get_IP(),
 										itr.second->get_port());
 
-		socket_handler('s', m_socket_status);	// 's' is key for (s)end messages
+		packet_status('s', m_socket_status);	// 's' is key for (s)end messages
 	}
+}
+
+
+// packet_status
+void Server::packet_status(const char socketTransferType, sf::Socket::Status& status)
+{
+	switch (status)
+	{
+	// Done
+	case sf::Socket::Done:
+
+		if (socketTransferType == 'r')
+		{
+			for (auto& itr : m_client_map)
+			{
+				if (m_sender_IP->toString() == *itr.second->get_IP() &&
+					m_sender_port == itr.second->get_port())
+				{
+					itr.second->set_packet(*m_packet);
+				}
+			}
+		}
+
+		break;
+	// NotReady
+	case sf::Socket::NotReady:
+		break;
+	// Disconnected
+	case sf::Socket::Disconnected:
+		break;
+	// Error
+	case sf::Socket::Error:
+		break;
+	// Default
+	default:
+		std::cout << "Something broke in switch Server::socket_status()" << std::endl;
+	}
+
+	std::string type = socketTransferType == 'r' ? "recieve " : "send ";	// print socket status for current function
+	//std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
 }
 
 
 // inti connect
 void Server::init_connect()
 {
-	std::cout << "Waiting for clients...\n" << std::endl;
+	std::cout << "Waiting for clients to connect...\n" << std::endl;
 
 	sf::Packet packet;
 	sf::IpAddress sender_IP;
@@ -152,77 +187,16 @@ void Server::init_connect()
 }
 
 
-// socket status
-void Server::socket_handler(const char socketTransferType, sf::Socket::Status& status)
-{
-	char transfer_type = socketTransferType;
-
-	switch (status)
-	{
-	// Done
-	case sf::Socket::Done:
-
-		if(transfer_type == 'r')
-		{
-			for (auto& itr : m_client_map)
-			{
-				if (m_sender_IP->toString() == *itr.second->get_IP() &&
-					m_sender_port == itr.second->get_port())
-				{
-					itr.second->set_packet(*m_packet);
-				}
-			}
-		}
-
-		break;
-	// NotReady
-	case sf::Socket::NotReady:
-		break;
-	// Disconnected
-	case sf::Socket::Disconnected:
-		break;
-	// Error
-	case sf::Socket::Error:
-		break;
-	// Default
-	default:
-		std::cout << "Something broke in switch at Server::socket_status()" << std::endl;
-	}
-
-	std::string type = transfer_type == 'r' ? "recieve " : "send ";	// print socket status
-	std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
-}
-
-
-// tick rate
-bool Server::update_tick(const float tickRate)
-{
-	m_current_t = m_clock->getElapsedTime().asSeconds();
-
-	bool do_update = (m_current_t - m_last_t) > tickRate ? true : false;
-
-	if (do_update)
-		m_last_t = m_current_t;
-
-	return do_update;
-}
-
-
 // run connect
 void Server::run_connect()
 {
 	std::cout << "Starting game\n" << std::endl;
 
-	m_clock->restart();
-
 	while (m_client_map.size() == 2)	// fix this
 	{
-		if (update_tick(m_tickrate))
-		{
-			recieve_packets();
-			update_packets();
-			send_packets();
-		}
+		recieve_packet();
+		update_packet();
+		send_packet();
 	}
 }
 

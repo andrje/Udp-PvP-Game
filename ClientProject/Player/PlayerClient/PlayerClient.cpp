@@ -11,7 +11,10 @@
 
 // cTor
 PlayerClient::PlayerClient()
-	: m_is_shooting(false)
+	:
+	m_is_shooting(false),
+	m_current_t(0),
+	m_last_t(0)
 {
 	init_shape(30, 4, sf::Color::Magenta);
 
@@ -21,33 +24,33 @@ PlayerClient::PlayerClient()
 
 
 // input
-void PlayerClient::move(const float deltaT)
+void PlayerClient::dir_input(const float deltaT)
 {
 	for (size_t i = 0; i < 3; i++)
 		m_input.at(i) = 0;
 	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		m_input.at(0) = -1;
+		m_input.at(Input::HORI) = -1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		m_input.at(0) = 1;
+		m_input.at(Input::HORI) = 1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-		m_input.at(1) = -1;
+		m_input.at(Input::VERT) = -1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-		m_input.at(1) = 1;
+		m_input.at(Input::VERT) = 1;
 
 	if(sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		m_input.at(2) = 1;
+		m_input.at(Input::MOUSE_1) = 1;
 
 	update_packet_input(m_input, deltaT);
 }
 
 
 // shoot
-void PlayerClient::shoot(sf::RenderWindow& rWin)
+void PlayerClient::shoot_input(sf::RenderWindow& rWin)
 {
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_is_shooting)
 	{
-		//m_is_shooting = true;
+		m_is_shooting = true;
 		sf::Vector2i mouse_pos = sf::Mouse::getPosition(rWin);
 
 		Projectile* projectile = new Projectile(get_cpp_server_pos_this(),
@@ -64,20 +67,12 @@ void PlayerClient::shoot(sf::RenderWindow& rWin)
 
 
 // update
-void PlayerClient::update(const float deltaT,
-							sf::UdpSocket& socket,
-							const std::string& serverIP,
-							const unsigned short serverPort,
-							sf::RenderWindow& rWin)
+void PlayerClient::update(const float deltaT, sf::RenderWindow& rWin)
 {
-	// input
-	move(deltaT);
-	// shoot TEST
-	shoot(rWin);
-
-	// network
-	send_packet(socket, serverIP, serverPort);
-	receive_packet(socket);
+	//// input
+	//dir_input(deltaT);
+	//// shoot TEST
+	//shoot_input(rWin);	// render win to get mouse pos
 
 	set_shape_pos(get_cpp_server_pos_this());
 	set_health(get_cpp_server_health_this());
@@ -86,7 +81,7 @@ void PlayerClient::update(const float deltaT,
 	for (size_t i = 0; i < get_projectiles_vec().size();)
 	{
 		get_projectiles_vec().at(i)->update(deltaT, rWin);
-
+	
 		// destroy
 		if (get_projectiles_vec().at(i)->destroy_self())
 		{
@@ -97,3 +92,4 @@ void PlayerClient::update(const float deltaT,
 		i++;
 	}
 }
+

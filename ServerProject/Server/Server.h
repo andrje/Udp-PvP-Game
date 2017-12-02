@@ -22,11 +22,11 @@ public:
 	Server(const std::string& serverIP = "127.0.0.1", const unsigned short serverPort = 50000);
 	~Server();
 
-	void	recieve_packets();
-	void	update_packets();
-	void	send_packets();
+	void	recieve_packet();
+	void	update_packet();
+	void	send_packet();
+	void	packet_status(const char socketTransferType, sf::Socket::Status& status);
 	void	init_connect();
-	void	socket_handler(const char socketTransferType, sf::Socket::Status& status);
 	bool	update_tick(const float tickRate);
 	void	run_connect();
 	void	run();
@@ -44,9 +44,4 @@ private:
 
 	ClientMap			m_client_map;
 	SocketMsg			m_socket_msg;
-
-	sf::Clock*			m_clock;
-	float				m_tickrate,
-						m_current_t,
-						m_last_t;
 };

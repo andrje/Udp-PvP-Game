@@ -11,14 +11,16 @@ Cpp* PlayerSuper::m_cpp = new Cpp();
 
 // cTor
 PlayerSuper::PlayerSuper()
-	: m_shape(new sf::CircleShape())
+	:
+	m_shape(new sf::CircleShape()),
+	m_packet(new sf::Packet())
 {}
 
 
 // dTor
 PlayerSuper::~PlayerSuper()
 {
-	SAFE_DEL(m_shape);		SAFE_DEL(m_cpp);
+	SAFE_DEL(m_shape);		SAFE_DEL(m_cpp);	SAFE_DEL(m_packet);
 }
 
 
@@ -58,37 +60,11 @@ ProjectilesVec& PlayerSuper::get_projectiles_vec()
 // update packet input
 void PlayerSuper::update_packet_input(std::vector<int>& input, const float deltaT)
 {
-	m_cpp->m_input_x = input.at(0);
-	m_cpp->m_input_y = input.at(1);
-	m_cpp->m_input_m_1 = input.at(2);
+	m_cpp->m_input_x = input.at(Input::HORI);
+	m_cpp->m_input_y = input.at(Input::VERT);
+	m_cpp->m_input_m_1 = input.at(Input::MOUSE_1);
 
 	m_cpp->m_delta_t = deltaT;
-}
-
-
-// send packet
-void PlayerSuper::send_packet(sf::UdpSocket& socket,
-								const std::string& serverIP,
-								const unsigned short serverPort)
-{
-	sf::Packet packet;
-	packet << *m_cpp;
-	//std::cout << "send before" << std::endl;
-	socket.send(packet, serverIP, serverPort);
-	//std::cout << "send after" << '\n' << std::endl;
-}
-
-
-// receive packet
-void PlayerSuper::receive_packet(sf::UdpSocket& socket)
-{
-	sf::Packet packet;
-	sf::IpAddress sender_IP;
-	unsigned short sender_port;
-	//std::cout << "receive before" << std::endl;
-	socket.receive(packet, sender_IP, sender_port);
-	//std::cout << "receive after" << '\n' << std::endl;
-	packet >> *m_cpp;
 }
 
 
@@ -117,6 +93,25 @@ float PlayerSuper::get_cpp_server_health_this()
 float PlayerSuper::get_cpp_server_health_other()
 {
 	return m_cpp->m_health_other;
+}
+
+
+// get packet
+sf::Packet* PlayerSuper::get_packet()
+{
+	m_packet->clear();
+	*m_packet << *m_cpp;
+
+	return m_packet;
+}
+
+
+// set packet
+void PlayerSuper::set_packet(sf::Packet& packet)
+{
+	packet >> *m_cpp;
+
+	//std::cout << *m_cpp << '\n' << std::endl;
 }
 
 

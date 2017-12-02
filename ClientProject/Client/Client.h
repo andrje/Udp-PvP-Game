@@ -8,6 +8,8 @@
 // forward
 class PlayerClient;
 class PlayerServer;
+// typedef
+using SocketMsg = std::vector<std::string*>;
 
 
 class Client
@@ -16,10 +18,18 @@ public:
 	Client(const std::string& serverIP = "127.0.0.1",
 			const unsigned short serverPort = 50000);
 
-	void			update();
+	void		send_packet();
+	void		receive_packet();
+	void		packet_status(const char socketTransferType, sf::Socket::Status& status);
+
+	void		check_update_time(const float tickRate, const float frameRate);
+	bool		update_frame(const float frameRate);
+	void		run();
 
 private:
 	sf::UdpSocket*		m_socket;
+	sf::Socket::Status	m_socket_status;
+	sf::Packet*			m_packet;
 	std::string*		m_client_IP;
 	std::string*		m_server_IP;
 	unsigned short		m_client_port,
@@ -30,7 +40,18 @@ private:
 	size_t				m_win_width,
 						m_win_height;
 	sf::Clock*			m_clock;
-	float				m_framerate;
+	float				m_tickrate,
+						m_framerate,
+						m_current_t,
+						m_last_t,
+						m_last_t_tick,
+						m_last_t_frame,
+						m_delta_t;
+
+	bool				m_do_tick,
+						m_do_frame;
+
+	SocketMsg			m_socket_msg;
 
 private:
 	PlayerClient*		m_player_local;
