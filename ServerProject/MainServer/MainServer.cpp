@@ -11,8 +11,6 @@ struct PacketData
 	float x2 = 0, y2 = 0, z2 = 0;
 };
 
-
-
 void socket_send(sf::Socket::Status& status, sf::Packet& packet)
 {
 	switch (status)
@@ -94,9 +92,7 @@ int main()
 			pd.z1 += 3;
 		}
 		else if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && isPressed)
-		{
 			isPressed = false;
-		}
 
 		current_t = clock.getElapsedTime().asSeconds();
 		if (current_t - last_t > tick_r)
