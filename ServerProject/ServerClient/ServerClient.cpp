@@ -85,12 +85,12 @@ void ServerClient::set_packet(sf::Packet& packet)
 // update
 void ServerClient::update()
 {
-	sf::Vector2f tmp_pos;
-	tmp_pos.x = m_spp->m_input_x;
-	tmp_pos.y = m_spp->m_input_y;
+	sf::Vector2f tmp_input;
+	tmp_input.x = m_spp->m_input_x;
+	tmp_input.y = m_spp->m_input_y;
 
-	if (tmp_pos.x != 0 && tmp_pos.y != 0)
-		tmp_pos /= std::sqrt(tmp_pos.x * tmp_pos.x + tmp_pos.y * tmp_pos.y);
+	if (tmp_input.x != 0 && tmp_input.y != 0)
+		tmp_input /= std::sqrt(tmp_input.x * tmp_input.x + tmp_input.y * tmp_input.y);
 
-	m_spp->m_player_pos_this += tmp_pos * SPEED_BASE * m_spp->m_delta_t;
+	m_spp->m_player_pos_this += tmp_input * SPEED_BASE * m_spp->m_delta_t;
 }

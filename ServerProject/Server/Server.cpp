@@ -49,7 +49,7 @@ Server::~Server()
 
 
 // recieve packets
-void Server::recieve_packet()
+void Server::receive_packet()
 {
 	m_packet->clear();
 	m_socket_status = m_socket->receive(*m_packet, *m_sender_IP, m_sender_port);
@@ -194,9 +194,12 @@ void Server::run_connect()
 
 	while (m_client_map.size() == 2)	// fix this
 	{
-		recieve_packet();
+		
+		receive_packet();
 		update_packet();
 		send_packet();
+
+		
 	}
 }
 

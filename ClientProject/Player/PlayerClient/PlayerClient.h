@@ -14,13 +14,6 @@ public:
 	void		dir_input(const float deltaT);
 	void		shoot_input(sf::RenderWindow& rWin);
 
-
-	/*void		update(const float deltaT,
-						sf::UdpSocket& socket,
-						const std::string& serverIP,
-						const unsigned short serverPort´,
-						sf::RenderWindow& rWin);*/
-
 	void		update(const float deltaT, sf::RenderWindow& rWin);
 
 private:

@@ -18,12 +18,13 @@ public:
 	Client(const std::string& serverIP = "127.0.0.1",
 			const unsigned short serverPort = 50000);
 
+	void		init_connect();
 	void		send_packet();
 	void		receive_packet();
-	void		packet_status(const char socketTransferType, sf::Socket::Status& status);
+	sf::Socket::Status		packet_status(const char socketTransferType, sf::Socket::Status& status);
+	// deleted .vs, so this is commit
 
 	void		check_update_time(const float tickRate, const float frameRate);
-	bool		update_frame(const float frameRate);
 	void		run();
 
 private:
@@ -42,7 +43,7 @@ private:
 	sf::Clock*			m_clock;
 	float				m_tickrate,
 						m_framerate,
-						m_current_t,
+						m_first_t,
 						m_last_t,
 						m_last_t_tick,
 						m_last_t_frame,

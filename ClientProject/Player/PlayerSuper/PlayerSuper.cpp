@@ -33,6 +33,7 @@ void PlayerSuper::init_shape(const float radius,
 	m_shape->setPointCount(pointCount);
 	m_shape->setOrigin(sf::Vector2f(radius, radius));
 	m_shape->setFillColor(color);
+	m_shape->setPosition(-100, -100);
 }
 
 

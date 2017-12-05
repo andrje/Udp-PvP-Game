@@ -69,11 +69,6 @@ void PlayerClient::shoot_input(sf::RenderWindow& rWin)
 // update
 void PlayerClient::update(const float deltaT, sf::RenderWindow& rWin)
 {
-	//// input
-	//dir_input(deltaT);
-	//// shoot TEST
-	//shoot_input(rWin);	// render win to get mouse pos
-
 	set_shape_pos(get_cpp_server_pos_this());
 	set_health(get_cpp_server_health_this());
 
@@ -89,6 +84,7 @@ void PlayerClient::update(const float deltaT, sf::RenderWindow& rWin)
 			get_projectiles_vec().erase(get_projectiles_vec().begin());
 			continue;
 		}
+
 		i++;
 	}
 }

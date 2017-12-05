@@ -12,7 +12,8 @@
 Projectile::Projectile(const sf::Vector2f& spawnPos,
 						const sf::Vector2f& mousePos,
 						const sf::Vector2f& size)
-	: m_clock(new sf::Clock()),
+	:
+	m_clock(new sf::Clock()),
 	m_max_life(4), m_bounces(0),
 	m_max_bounces(2),
 	m_destroy_self(false)

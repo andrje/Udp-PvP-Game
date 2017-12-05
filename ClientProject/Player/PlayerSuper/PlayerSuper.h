@@ -17,6 +17,10 @@ struct ClientPlayerPacket;
 // typedef
 using ProjectilesVec = std::vector<Projectile*>;
 using Cpp = ClientPlayerPacket;
+// const
+const float SPEED_BASE = 350;
+const float SPEED_DASH = SPEED_BASE * 1.5;
+const float SPEED_MAX = SPEED_BASE * SPEED_DASH;
 
 
 class PlayerSuper
@@ -25,9 +29,8 @@ public:
 	PlayerSuper();
 	~PlayerSuper();
 
-	void				init_shape(const float radius,
-									const size_t pointCount,
-									const sf::Color& color);
+	void				init_shape(const float radius, const size_t pointCount, const sf::Color& color);
+
 	void				set_shape_pos(const sf::Vector2f& newPos);
 	void				set_health(const float newHealth);
 	ProjectilesVec&		get_projectiles_vec();
@@ -42,14 +45,14 @@ public:
 	void				set_packet(sf::Packet& packet);
 
 	void				render(sf::RenderWindow& rWin);
+
+protected:
+	enum Input { HORI, VERT, MOUSE_1 };
 	
 protected:
 	sf::CircleShape*	m_shape;
-
 	sf::Packet*			m_packet;
 
 	ProjectilesVec		m_projectiles_vec;
 	static Cpp*			m_cpp;
-
-	enum Input { HORI, VERT, MOUSE_1 };
 };

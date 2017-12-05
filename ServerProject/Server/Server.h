@@ -22,12 +22,11 @@ public:
 	Server(const std::string& serverIP = "127.0.0.1", const unsigned short serverPort = 50000);
 	~Server();
 
-	void	recieve_packet();
+	void	receive_packet();
 	void	update_packet();
 	void	send_packet();
 	void	packet_status(const char socketTransferType, sf::Socket::Status& status);
 	void	init_connect();
-	bool	update_tick(const float tickRate);
 	void	run_connect();
 	void	run();
 

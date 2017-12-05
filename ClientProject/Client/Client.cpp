@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "Client.h"
 
@@ -18,8 +19,8 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	m_win_width(640),
 	m_win_height(360),
 	m_clock(new sf::Clock()),
-	m_tickrate(0.0167),		// 30 = 0.0333 | 60 = 0.0167 | 120 = 0.0083
-	m_framerate(0.0167),
+	m_tickrate(0.0333),		// 30 = 0.0333 | 60 = 0.0167 | 120 = 0.0083
+	m_framerate(0.0083),
 	m_last_t_tick(0),
 	m_last_t_frame(0),
 	m_delta_t(0),
@@ -44,6 +45,40 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 
 	m_player_local = new PlayerClient();
 	m_player_server = new PlayerServer();
+
+	m_render_win->clear(sf::Color::Cyan);
+	m_player_server->render(*m_render_win);
+	m_render_win->display();
+}
+
+
+// init connect
+void Client::init_connect()
+{
+	sf::IpAddress sender_IP;
+	unsigned short sender_port;
+	m_packet->clear();
+
+	std::cout << "Waiting for server response..." << std::endl;
+
+	bool received = false;
+	size_t timed_out = 20;
+	m_clock->restart();
+
+	do
+	{
+		m_socket_status = m_socket->send(*m_player_local->get_packet(), *m_server_IP, m_server_port);
+
+		if (m_socket->receive(*m_packet, sender_IP, sender_port) == sf::Socket::Done)
+		{
+			m_player_local->set_packet(*m_packet);
+			received = true;
+		}
+	}
+	while (m_clock->getElapsedTime().asSeconds() < timed_out && !received);
+
+	std::string status = received ? "Connected to server. Waiting for other player..." : "Server connection timed out. Put another quarter in and try again..";
+	std::cout << status << std::endl;
 }
 
 
@@ -55,14 +90,20 @@ void Client::send_packet()
 		sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 	{
-		m_socket_status = m_socket->send(*m_player_local->get_packet(),
-										*m_server_IP,
-										m_server_port);
+		if (m_do_tick)
+		{
+			m_socket_status = m_socket->send(*m_player_local->get_packet(),
+				*m_server_IP,
+				m_server_port);
+		}
 	}
 
-	
-
-	packet_status('s', m_socket_status);	// 's' is key for (s)end messages
+	/*if (m_do_tick)
+	{
+		m_socket_status = m_socket->send(*m_player_local->get_packet(),
+			*m_server_IP,
+			m_server_port);
+	}*/
 }
 
 
@@ -75,21 +116,21 @@ void Client::receive_packet()
 	m_packet->clear();
 	m_socket_status = m_socket->receive(*m_packet, sender_IP, sender_port);
 
-	packet_status('r', m_socket_status);	// 'r' is key for (r)ecieve messages
+	m_player_local->set_packet(*m_packet);
 }
 
 
 // packet_status
-void Client::packet_status(const char socketTransferType, sf::Socket::Status& status)
+sf::Socket::Status Client::packet_status(const char socketTransferType, sf::Socket::Status& status)
 {
 	switch (status)
 	{
 		// Done
 	case sf::Socket::Done:
 
-		if (socketTransferType == 'r')
-			m_player_local->set_packet(*m_packet);
-
+		/*if (socketTransferType == 'r')
+			m_player_local->set_packet(*m_packet);*/
+		
 		break;
 		// NotReady
 	case sf::Socket::NotReady:
@@ -106,15 +147,17 @@ void Client::packet_status(const char socketTransferType, sf::Socket::Status& st
 	}
 
 	std::string type = socketTransferType == 'r' ? "recieve " : "send ";	// print socket status for current function
-	//std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
+	std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
+
+	return status;
 }
 
 
 // tick rate
 void Client::check_update_time(const float tickRate, const float frameRate)
 {
-	m_do_tick = (m_current_t - m_last_t_tick) > tickRate ? true : false;		// tick rate
-	m_do_frame = (m_current_t - m_last_t_frame) > frameRate ? true : false;		// frame rate
+	m_do_tick = (m_first_t - m_last_t_tick) > tickRate ? true : false;		// tick rate
+	m_do_frame = (m_first_t - m_last_t_frame) > frameRate ? true : false;	// frame rate
 }
 
 
@@ -124,10 +167,12 @@ void Client::run()
 	m_clock->restart();
 	m_last_t = m_clock->getElapsedTime().asSeconds();
 
+	init_connect();
+
 	while (m_render_win->isOpen())
 	{
-		m_current_t = m_clock->getElapsedTime().asSeconds();
-		m_delta_t += m_current_t - m_last_t;
+		m_first_t = m_clock->getElapsedTime().asSeconds();
+		m_delta_t += m_first_t - m_last_t;
 
 		sf::Event event;
 		while (m_render_win->pollEvent(event))
@@ -136,12 +181,11 @@ void Client::run()
 				m_render_win->close();
 		}
 
-
-
+		
 		// input
 		m_player_local->dir_input(m_delta_t);
 		// shoot TEST
-		m_player_local->shoot_input(*m_render_win);	// render win to get mouse pos
+		//m_player_local->shoot_input(*m_render_win);	// render win to get mouse pos
 
 
 
@@ -149,16 +193,6 @@ void Client::run()
 		check_update_time(m_tickrate, m_framerate);
 
 		// update network
-		//send_packet();
-		
-		/*if (m_do_tick)
-		{
-			send_packet();
-			receive_packet();
-
-			m_last_t_tick = m_current_t;
-		}*/
-
 		send_packet();
 		receive_packet();
 
@@ -176,9 +210,11 @@ void Client::run()
 			m_render_win->display();
 
 			m_delta_t = 0;
-			m_last_t_frame = m_current_t;
+			m_last_t_frame = m_first_t;
 		}
 
 		m_last_t = m_clock->getElapsedTime().asSeconds();
+
+		//std::cout << "main" << std::endl;
 	}
 }
