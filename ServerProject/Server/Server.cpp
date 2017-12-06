@@ -19,7 +19,7 @@ Server::Server(const std::string & serverIP, const unsigned short serverPort)
 	m_nr_clients_connected(0)
 {
 	m_socket->bind(m_server_port);
-	m_socket->setBlocking(true);
+	m_socket->setBlocking(false);
 
 	m_socket_msg.push_back(new std::string("done"));
 	m_socket_msg.push_back(new std::string("not ready"));
@@ -52,9 +52,18 @@ Server::~Server()
 void Server::receive_packet()
 {
 	m_packet->clear();
-	m_socket_status = m_socket->receive(*m_packet, *m_sender_IP, m_sender_port);
+	while (m_socket->receive(*m_packet, *m_sender_IP, m_sender_port) != sf::Socket::Done) {}
 
-	packet_status('r', m_socket_status);	// 'r' is key for (r)ecieve messages
+	for (auto& itr : m_client_map)
+	{
+		if (m_sender_IP->toString() == *itr.second->get_IP() &&
+			m_sender_port == itr.second->get_port())
+		{
+			itr.second->set_packet(*m_packet);
+		}
+	}
+
+	//packet_status('r', m_socket_status);	// 'r' is key for (r)ecieve messages
 }
 
 
@@ -62,7 +71,12 @@ void Server::receive_packet()
 void Server::update_packet()
 {
 	for (auto& itr : m_client_map)	// update pos, health etc etc
+	{
+		//if (!itr.second->get_is_connected)
+
+
 		itr.second->update();
+	}
 
 	for (auto& itr_this : m_client_map)	// copy P1's P1 data to P2's P1 data, and vice versa
 	{
@@ -71,6 +85,9 @@ void Server::update_packet()
 			if (itr_this.second->get_client_nr() !=
 				itr_other.second->get_client_nr())
 			{
+				itr_other.second->get_spp()->m_is_connected_other =
+					itr_this.second->get_spp()->m_is_connected_this;
+
 				itr_other.second->get_spp()->m_player_pos_other =
 					itr_this.second->get_spp()->m_player_pos_this;
 
@@ -91,7 +108,7 @@ void Server::send_packet()
 										*itr.second->get_IP(),
 										itr.second->get_port());
 
-		packet_status('s', m_socket_status);	// 's' is key for (s)end messages
+		//packet_status('s', m_socket_status);	// 's' is key for (s)end messages
 	}
 }
 
@@ -149,7 +166,7 @@ void Server::init_connect()
 
 	do
 	{
-		m_socket->receive(packet, sender_IP, sender_port);	// receive
+		while (m_socket->receive(packet, sender_IP, sender_port) != sf::Socket::Done) {} // receive
 
 		if (m_client_map.find(sender_port) == m_client_map.end())
 		{
@@ -190,16 +207,13 @@ void Server::init_connect()
 // run connect
 void Server::run_connect()
 {
-	std::cout << "Starting game\n" << std::endl;
+	std::cout << "Starting game in..\n" << std::endl;
 
-	while (m_client_map.size() == 2)	// fix this
+	while (true)	// fix this
 	{
-		
 		receive_packet();
 		update_packet();
 		send_packet();
-
-		
 	}
 }
 

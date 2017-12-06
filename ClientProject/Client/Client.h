@@ -15,13 +15,13 @@ using SocketMsg = std::vector<std::string*>;
 class Client
 {
 public:
-	Client(const std::string& serverIP = "127.0.0.1",
-			const unsigned short serverPort = 50000);
+	Client(const std::string& serverIP = "127.0.0.1", const unsigned short serverPort = 50000);
+	~Client();
 
 	void		init_connect();
 	void		send_packet();
 	void		receive_packet();
-	sf::Socket::Status		packet_status(const char socketTransferType, sf::Socket::Status& status);
+	void		packet_status(const char socketTransferType, sf::Socket::Status& status);
 	// deleted .vs, so this is commit
 
 	void		check_update_time(const float tickRate, const float frameRate);

@@ -82,6 +82,13 @@ void ServerClient::set_packet(sf::Packet& packet)
 }
 
 
+// get is connected
+bool ServerClient::get_is_connected()
+{
+	return m_spp->m_is_connected_this;
+}
+
+
 // update
 void ServerClient::update()
 {

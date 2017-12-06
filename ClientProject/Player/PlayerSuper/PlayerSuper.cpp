@@ -116,6 +116,13 @@ void PlayerSuper::set_packet(sf::Packet& packet)
 }
 
 
+// set is connected
+void PlayerSuper::set_is_connected(const bool trueFalse)
+{
+	m_cpp->m_is_connected_this = trueFalse;
+}
+
+
 // render
 void PlayerSuper::render(sf::RenderWindow& rWin)
 {

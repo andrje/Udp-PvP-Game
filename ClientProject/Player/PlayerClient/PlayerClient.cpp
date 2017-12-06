@@ -73,19 +73,19 @@ void PlayerClient::update(const float deltaT, sf::RenderWindow& rWin)
 	set_health(get_cpp_server_health_this());
 
 	// projectiles
-	for (size_t i = 0; i < get_projectiles_vec().size();)
-	{
-		get_projectiles_vec().at(i)->update(deltaT, rWin);
-	
-		// destroy
-		if (get_projectiles_vec().at(i)->destroy_self())
-		{
-			SAFE_DEL(get_projectiles_vec().at(i));
-			get_projectiles_vec().erase(get_projectiles_vec().begin());
-			continue;
-		}
+	//for (size_t i = 0; i < get_projectiles_vec().size();)
+	//{
+	//	get_projectiles_vec().at(i)->update(deltaT, rWin);
+	//
+	//	// destroy
+	//	if (get_projectiles_vec().at(i)->destroy_self())
+	//	{
+	//		SAFE_DEL(get_projectiles_vec().at(i));
+	//		get_projectiles_vec().erase(get_projectiles_vec().begin());
+	//		continue;
+	//	}
 
-		i++;
-	}
+	//	i++;
+	//}
 }
 

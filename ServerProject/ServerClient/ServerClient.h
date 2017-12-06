@@ -35,6 +35,7 @@ public:
 
 	sf::Packet*		get_packet();
 	void			set_packet(sf::Packet& packet);
+	bool			get_is_connected();
 
 	void			update();
 

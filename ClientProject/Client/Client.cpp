@@ -52,6 +52,15 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 }
 
 
+// dTor
+Client::~Client()
+{
+	m_player_local->set_is_connected(false);
+
+	while (m_socket->send(*m_player_local->get_packet(), *m_server_IP, m_server_port) != sf::Socket::Done);
+}
+
+
 // init connect
 void Client::init_connect()
 {
@@ -121,7 +130,7 @@ void Client::receive_packet()
 
 
 // packet_status
-sf::Socket::Status Client::packet_status(const char socketTransferType, sf::Socket::Status& status)
+void Client::packet_status(const char socketTransferType, sf::Socket::Status& status)
 {
 	switch (status)
 	{
@@ -147,9 +156,7 @@ sf::Socket::Status Client::packet_status(const char socketTransferType, sf::Sock
 	}
 
 	std::string type = socketTransferType == 'r' ? "recieve " : "send ";	// print socket status for current function
-	std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
-
-	return status;
+	//std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
 }
 
 
