@@ -64,13 +64,15 @@ Client::~Client()
 // init connect
 void Client::init_connect()
 {
+	char buffer[1024];
+	size_t received = 0;
 	sf::IpAddress sender_IP;
 	unsigned short sender_port;
 	m_packet->clear();
 
 	std::cout << "Waiting for server response..." << std::endl;
 
-	bool received = false;
+	bool has_received = false;
 	size_t timed_out = 20;
 	m_clock->restart();
 
@@ -81,13 +83,18 @@ void Client::init_connect()
 		if (m_socket->receive(*m_packet, sender_IP, sender_port) == sf::Socket::Done)
 		{
 			m_player_local->set_packet(*m_packet);
-			received = true;
+			has_received = true;
 		}
 	}
-	while (m_clock->getElapsedTime().asSeconds() < timed_out && !received);
+	while (m_clock->getElapsedTime().asSeconds() < timed_out && !has_received);
 
-	std::string status = received ? "Connected to server. Waiting for other player..." : "Server connection timed out. Put another quarter in and try again..";
+	std::string status = has_received ? "Connected to server. Waiting for other player..." : "Server connection timed out. Put another quarter in and try again..";
 	std::cout << status << std::endl;
+
+	// TESTING
+	while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
+	
+	std::cout << buffer << std::endl;
 }
 
 

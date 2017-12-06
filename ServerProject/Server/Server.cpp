@@ -113,46 +113,6 @@ void Server::send_packet()
 }
 
 
-// packet_status
-void Server::packet_status(const char socketTransferType, sf::Socket::Status& status)
-{
-	switch (status)
-	{
-	// Done
-	case sf::Socket::Done:
-
-		if (socketTransferType == 'r')
-		{
-			for (auto& itr : m_client_map)
-			{
-				if (m_sender_IP->toString() == *itr.second->get_IP() &&
-					m_sender_port == itr.second->get_port())
-				{
-					itr.second->set_packet(*m_packet);
-				}
-			}
-		}
-
-		break;
-	// NotReady
-	case sf::Socket::NotReady:
-		break;
-	// Disconnected
-	case sf::Socket::Disconnected:
-		break;
-	// Error
-	case sf::Socket::Error:
-		break;
-	// Default
-	default:
-		std::cout << "Something broke in switch Server::socket_status()" << std::endl;
-	}
-
-	std::string type = socketTransferType == 'r' ? "recieve " : "send ";	// print socket status for current function
-	//std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
-}
-
-
 // inti connect
 void Server::init_connect()
 {
@@ -201,6 +161,12 @@ void Server::init_connect()
 	} while (m_client_map.size() < 2);
 
 	std::cout << "Player connections established" << std::endl;
+
+	// TESTING
+	std::string test = "test";
+
+	for (auto& itr : m_client_map)
+		while (m_socket->send(test.c_str(), test.size() + 1, *itr.second->get_IP(), itr.second->get_port()) != sf::Socket::Done);
 }
 
 
