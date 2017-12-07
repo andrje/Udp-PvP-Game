@@ -49,6 +49,12 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	m_render_win->clear(sf::Color::Cyan);
 	m_player_server->render(*m_render_win);
 	m_render_win->display();
+
+
+
+
+//--------------------------------------------
+	init_func_ptrs();
 }
 
 
@@ -92,9 +98,8 @@ void Client::init_connect()
 	std::cout << status << std::endl;
 
 	// TESTING
-	while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
-	
-	std::cout << buffer << std::endl;
+	/*while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
+	m_current_state = (std::size_t)*buffer - '0';*/
 }
 
 
@@ -113,13 +118,6 @@ void Client::send_packet()
 				m_server_port);
 		}
 	}
-
-	/*if (m_do_tick)
-	{
-		m_socket_status = m_socket->send(*m_player_local->get_packet(),
-			*m_server_IP,
-			m_server_port);
-	}*/
 }
 
 
@@ -133,37 +131,6 @@ void Client::receive_packet()
 	m_socket_status = m_socket->receive(*m_packet, sender_IP, sender_port);
 
 	m_player_local->set_packet(*m_packet);
-}
-
-
-// packet_status
-void Client::packet_status(const char socketTransferType, sf::Socket::Status& status)
-{
-	switch (status)
-	{
-		// Done
-	case sf::Socket::Done:
-
-		/*if (socketTransferType == 'r')
-			m_player_local->set_packet(*m_packet);*/
-		
-		break;
-		// NotReady
-	case sf::Socket::NotReady:
-		break;
-		// Disconnected
-	case sf::Socket::Disconnected:
-		break;
-		// Error
-	case sf::Socket::Error:
-		break;
-		// Default
-	default:
-		std::cout << "Something broke in switch Server::socket_status()" << std::endl;
-	}
-
-	std::string type = socketTransferType == 'r' ? "recieve " : "send ";	// print socket status for current function
-	//std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
 }
 
 
@@ -183,11 +150,14 @@ void Client::run()
 
 	init_connect();
 
+
+	/*char buffer[1024];
+	size_t received = 0;
+	sf::IpAddress sender_IP;
+	unsigned short sender_port;*/
+
 	while (m_render_win->isOpen())
 	{
-		m_first_t = m_clock->getElapsedTime().asSeconds();
-		m_delta_t += m_first_t - m_last_t;
-
 		sf::Event event;
 		while (m_render_win->pollEvent(event))
 		{
@@ -195,40 +165,190 @@ void Client::run()
 				m_render_win->close();
 		}
 
-		
-		// input
-		m_player_local->dir_input(m_delta_t);
-		// shoot TEST
-		//m_player_local->shoot_input(*m_render_win);	// render win to get mouse pos
-
-
-
-		// get if/what to update
-		check_update_time(m_tickrate, m_framerate);
 
 		// update network
 		send_packet();
 		receive_packet();
 
-		// update render
-		if (m_do_frame)
-		{
-			m_render_win->clear(sf::Color::Cyan);
-
-			m_player_server->update();
-			m_player_local->update(m_delta_t, *m_render_win);
-
-			m_player_server->render(*m_render_win);
-			m_player_local->render(*m_render_win);
-
-			m_render_win->display();
-
-			m_delta_t = 0;
-			m_last_t_frame = m_first_t;
-		}
-
-		m_last_t = m_clock->getElapsedTime().asSeconds();
-
-		//std::cout << "main" << std::endl;
+		/*while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
+		m_current_state = (std::size_t)*buffer - '0';*/
+		func_vec[m_player_local->get_current_func()](*this);
 	}
 }
+
+
+
+
+
+//--------------------------------------------
+void Client::init_func_ptrs()
+{
+	std::function<void(Client&)> func_ptr = &Client::start;
+	func_vec.push_back(func_ptr);
+
+	func_ptr = &Client::game;
+	func_vec.push_back(func_ptr);
+
+	func_ptr = &Client::end;
+	func_vec.push_back(func_ptr);
+}
+
+
+void Client::start()
+{
+	char buffer[1024];
+	size_t received = 0;
+	sf::IpAddress sender_IP;
+	unsigned short sender_port;
+
+	/*while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
+	m_current_state = (std::size_t)*buffer - '0';*/
+
+	std::cout << "start" << std::endl;
+}
+
+
+void Client::game()
+{
+	std::cout << "game" << std::endl;
+
+	m_first_t = m_clock->getElapsedTime().asSeconds();
+	m_delta_t += m_first_t - m_last_t;
+
+	// input
+	m_player_local->dir_input(m_delta_t);
+
+	// get if/what to update
+	check_update_time(m_tickrate, m_framerate);
+
+	// update network
+	send_packet();
+	receive_packet();
+
+	// update render
+	if (m_do_frame)
+	{
+		m_render_win->clear(sf::Color::Cyan);
+
+		m_player_server->update();
+		m_player_local->update(m_delta_t, *m_render_win);
+
+		m_player_server->render(*m_render_win);
+		m_player_local->render(*m_render_win);
+
+		m_render_win->display();
+
+		m_delta_t = 0;
+		m_last_t_frame = m_first_t;
+	}
+
+	m_last_t = m_clock->getElapsedTime().asSeconds();
+}
+
+
+void Client::end()
+{
+	std::cout << "end" << std::endl;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// packet_status
+void Client::packet_status(const char socketTransferType, sf::Socket::Status& status)
+{
+	switch (status)
+	{
+		// Done
+	case sf::Socket::Done:
+
+		/*if (socketTransferType == 'r')
+		m_player_local->set_packet(*m_packet);*/
+
+		break;
+		// NotReady
+	case sf::Socket::NotReady:
+		break;
+		// Disconnected
+	case sf::Socket::Disconnected:
+		break;
+		// Error
+	case sf::Socket::Error:
+		break;
+		// Default
+	default:
+		std::cout << "Something broke in switch Server::socket_status()" << std::endl;
+	}
+
+	std::string type = socketTransferType == 'r' ? "recieve " : "send ";	// print socket status for current function
+																			//std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
+}
+
+
+//while (m_render_win->isOpen())
+//{
+//	m_first_t = m_clock->getElapsedTime().asSeconds();
+//	m_delta_t += m_first_t - m_last_t;
+
+//	sf::Event event;
+//	while (m_render_win->pollEvent(event))
+//	{
+//		if (event.type == sf::Event::Closed)
+//			m_render_win->close();
+//	}
+
+//	
+//	// input
+//	m_player_local->dir_input(m_delta_t);
+//	// shoot TEST
+//	//m_player_local->shoot_input(*m_render_win);	// render win to get mouse pos
+
+
+
+//	// get if/what to update
+//	check_update_time(m_tickrate, m_framerate);
+
+//	// update network
+//	send_packet();
+//	receive_packet();
+
+//	// update render
+//	if (m_do_frame)
+//	{
+//		m_render_win->clear(sf::Color::Cyan);
+
+//		m_player_server->update();
+//		m_player_local->update(m_delta_t, *m_render_win);
+
+//		m_player_server->render(*m_render_win);
+//		m_player_local->render(*m_render_win);
+
+//		m_render_win->display();
+
+//		m_delta_t = 0;
+//		m_last_t_frame = m_first_t;
+//	}
+
+//	m_last_t = m_clock->getElapsedTime().asSeconds();
+
+//	//std::cout << "main" << std::endl;
+//}

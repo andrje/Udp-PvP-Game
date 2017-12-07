@@ -116,6 +116,13 @@ void PlayerSuper::set_packet(sf::Packet& packet)
 }
 
 
+// get current func
+int PlayerSuper::get_current_func()
+{
+	return m_cpp->m_current_func;
+}
+
+
 // set is connected
 void PlayerSuper::set_is_connected(const bool trueFalse)
 {

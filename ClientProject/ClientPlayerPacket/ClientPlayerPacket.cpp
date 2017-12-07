@@ -6,11 +6,12 @@ ClientPlayerPacket::ClientPlayerPacket()
 	: 
 	m_is_connected_this(true),
 	m_is_connected_other(false),
+	m_current_func(0),
 	m_input_x(0),
 	m_input_y(0),
 	m_input_m_1(0),
 	m_delta_t(0),
-	m_player_pos_this(-100, -100),	// init spawn outside screen untill connection with server is established
+	m_player_pos_this(-100, -100),	// init spawn outside screen until connection with server is established, server delivers which side (left-right) this player spawns
 	m_player_pos_other(-100, -100),
 	m_health_this(100),
 	m_health_other(100)
@@ -41,6 +42,7 @@ sf::Packet& operator<<(sf::Packet& p, const ClientPlayerPacket& cpp)
 // receive packet
 sf::Packet& operator>>(sf::Packet& p, ClientPlayerPacket& cpp)
 {
-	return p >> cpp.m_player_pos_this.x >> cpp.m_player_pos_this.y >> cpp.m_health_this >>
+	return p >> cpp.m_current_func >>
+				cpp.m_player_pos_this.x >> cpp.m_player_pos_this.y >> cpp.m_health_this >>
 				cpp.m_is_connected_other >> cpp.m_player_pos_other.x >> cpp.m_player_pos_other.y >> cpp.m_health_other;
 }

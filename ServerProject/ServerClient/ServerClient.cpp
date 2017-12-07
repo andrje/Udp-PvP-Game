@@ -82,6 +82,13 @@ void ServerClient::set_packet(sf::Packet& packet)
 }
 
 
+// set current func
+void ServerClient::set_client_state(const std::size_t func)
+{
+	m_spp->m_current_func = func;
+}
+
+
 // get is connected
 bool ServerClient::get_is_connected()
 {

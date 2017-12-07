@@ -19,7 +19,7 @@ public:
 
 	bool			m_is_connected_this,	// false = disconnected, true = connected
 					m_is_connected_other;
-	int				m_input_x, m_input_y, m_input_m_1;
+	int				m_current_func, m_input_x, m_input_y, m_input_m_1;
 
 	sf::Vector2f	m_player_pos_this,
 					m_player_pos_other;

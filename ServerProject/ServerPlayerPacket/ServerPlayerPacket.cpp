@@ -6,6 +6,7 @@ ServerPlayerPacket::ServerPlayerPacket()
 	:
 	m_is_connected_this(false),
 	m_is_connected_other(false),
+	m_current_func(0),
 	m_input_x(0),
 	m_input_y(0),
 	m_input_m_1(0),
@@ -44,10 +45,8 @@ std::ostream& operator<<(std::ostream& out, const ServerPlayerPacket& cpp)
 // send packet
 sf::Packet& operator<<(sf::Packet& p, const ServerPlayerPacket& cpp)
 {
-	/*return p << cpp.m_player_pos_this.x << cpp.m_player_pos_this.y << cpp.m_health_this <<
-				cpp.m_player_pos_other.x << cpp.m_player_pos_other.y << cpp.m_health_other;*/
-
-	return p << cpp.m_player_pos_this.x << cpp.m_player_pos_this.y << cpp.m_health_this <<
+	return p << cpp.m_current_func <<
+				cpp.m_player_pos_this.x << cpp.m_player_pos_this.y << cpp.m_health_this <<
 				cpp.m_is_connected_other << cpp.m_player_pos_other.x << cpp.m_player_pos_other.y << cpp.m_health_other;
 }
 

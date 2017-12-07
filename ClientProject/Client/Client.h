@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include <functional>
 
 #include "SFML/Network.hpp"
 #include "SFML/Graphics.hpp"
@@ -22,10 +24,14 @@ public:
 	void		send_packet();
 	void		receive_packet();
 	void		packet_status(const char socketTransferType, sf::Socket::Status& status);
-	// deleted .vs, so this is commit
 
 	void		check_update_time(const float tickRate, const float frameRate);
 	void		run();
+
+	void		init_func_ptrs();
+	void		start();
+	void		game();
+	void		end();
 
 private:
 	sf::UdpSocket*		m_socket;
@@ -57,4 +63,6 @@ private:
 private:
 	PlayerClient*		m_player_local;
 	PlayerServer*		m_player_server;
+
+	std::vector <std::function<void(Client&)>> func_vec;
 };

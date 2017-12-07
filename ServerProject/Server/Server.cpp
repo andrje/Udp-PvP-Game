@@ -62,8 +62,6 @@ void Server::receive_packet()
 			itr.second->set_packet(*m_packet);
 		}
 	}
-
-	//packet_status('r', m_socket_status);	// 'r' is key for (r)ecieve messages
 }
 
 
@@ -71,12 +69,7 @@ void Server::receive_packet()
 void Server::update_packet()
 {
 	for (auto& itr : m_client_map)	// update pos, health etc etc
-	{
-		//if (!itr.second->get_is_connected)
-
-
 		itr.second->update();
-	}
 
 	for (auto& itr_this : m_client_map)	// copy P1's P1 data to P2's P1 data, and vice versa
 	{
@@ -103,13 +96,7 @@ void Server::update_packet()
 void Server::send_packet()
 {
 	for (auto& itr : m_client_map)
-	{
-		m_socket_status = m_socket->send(*itr.second->get_packet(), 
-										*itr.second->get_IP(),
-										itr.second->get_port());
-
-		//packet_status('s', m_socket_status);	// 's' is key for (s)end messages
-	}
+		m_socket->send(*itr.second->get_packet(), *itr.second->get_IP(), itr.second->get_port());
 }
 
 
@@ -149,9 +136,9 @@ void Server::init_connect()
 																spawn_pos_1,
 																spawn_pos_2)));
 
-			m_socket_status = m_socket->send(*m_client_map[sender_port]->get_packet(),	// send init packet
-											*m_client_map[sender_port]->get_IP(),
-											m_client_map[sender_port]->get_port());
+			m_socket->send(*m_client_map[sender_port]->get_packet(),	// send init packet
+										*m_client_map[sender_port]->get_IP(),
+										m_client_map[sender_port]->get_port());
 
 			std::cout << "Client " << m_nr_clients_connected << " connected." <<
 						"\nIP: " << *m_client_map.find(sender_port)->second->get_IP() <<
@@ -163,19 +150,19 @@ void Server::init_connect()
 	std::cout << "Player connections established" << std::endl;
 
 	// TESTING
-	std::string test = "test";
+	for (auto& i : m_client_map)
+		i.second->set_client_state(ClientState::GAME);
 
-	for (auto& itr : m_client_map)
-		while (m_socket->send(test.c_str(), test.size() + 1, *itr.second->get_IP(), itr.second->get_port()) != sf::Socket::Done);
+	send_packet();
 }
 
 
 // run connect
 void Server::run_connect()
 {
-	std::cout << "Starting game in..\n" << std::endl;
+	std::cout << "Starting game\n" << std::endl;
 
-	while (true)	// fix this
+	while (true)	// fix this to something useful
 	{
 		receive_packet();
 		update_packet();

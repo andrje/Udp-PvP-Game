@@ -25,10 +25,12 @@ public:
 	void	receive_packet();
 	void	update_packet();
 	void	send_packet();
-	void	packet_status(const char socketTransferType, sf::Socket::Status& status);
 	void	init_connect();
 	void	run_connect();
 	void	run();
+
+private:
+	enum ClientState { START = 0, GAME, END };
 
 private:
 	sf::UdpSocket*		m_socket;

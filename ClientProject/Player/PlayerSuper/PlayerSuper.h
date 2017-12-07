@@ -43,6 +43,7 @@ public:
 
 	sf::Packet*			get_packet();
 	void				set_packet(sf::Packet& packet);
+	int					get_current_func();
 	void				set_is_connected(const bool trueFalse);
 
 	void				render(sf::RenderWindow& rWin);

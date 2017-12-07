@@ -35,6 +35,7 @@ public:
 
 	sf::Packet*		get_packet();
 	void			set_packet(sf::Packet& packet);
+	void			set_client_state(const std::size_t func);
 	bool			get_is_connected();
 
 	void			update();
