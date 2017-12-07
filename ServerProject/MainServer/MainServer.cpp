@@ -61,7 +61,7 @@ void socket_receive(sf::Socket::Status& status, sf::Packet& packet, PacketData& 
 int main()
 {
 	Server server;
-	server.run();
+	server.run_server();
 
 	/*sf::UdpSocket* socket = new sf::UdpSocket();
 	socket->bind(50001);

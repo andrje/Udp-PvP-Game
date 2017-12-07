@@ -32,6 +32,7 @@ public:
 	void		start();
 	void		game();
 	void		end();
+	void		idle();
 
 private:
 	sf::UdpSocket*		m_socket;

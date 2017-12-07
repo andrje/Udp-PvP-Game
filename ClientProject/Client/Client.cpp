@@ -181,6 +181,7 @@ void Client::run()
 
 
 //--------------------------------------------
+// init func ptrs
 void Client::init_func_ptrs()
 {
 	std::function<void(Client&)> func_ptr = &Client::start;
@@ -191,27 +192,41 @@ void Client::init_func_ptrs()
 
 	func_ptr = &Client::end;
 	func_vec.push_back(func_ptr);
+
+	func_ptr = &Client::idle;
+	func_vec.push_back(func_ptr);
 }
 
 
+// start
 void Client::start()
 {
+	std::cout << "Both players connected.\n\nGame starts in... ";
+
 	char buffer[1024];
 	size_t received = 0;
 	sf::IpAddress sender_IP;
 	unsigned short sender_port;
 
-	/*while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
-	m_current_state = (std::size_t)*buffer - '0';*/
+	int count_down;
 
-	std::cout << "start" << std::endl;
+	do
+	{
+		while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
+		count_down = (int)*buffer - '0';
+
+		if(count_down > 0)
+			std::cout << count_down << "	";
+
+	} while (count_down > 0);
+
+	std::cout << "It's on!\n" << std::endl;
 }
 
 
+// game
 void Client::game()
 {
-	std::cout << "game" << std::endl;
-
 	m_first_t = m_clock->getElapsedTime().asSeconds();
 	m_delta_t += m_first_t - m_last_t;
 
@@ -246,10 +261,15 @@ void Client::game()
 }
 
 
+// end
 void Client::end()
 {
 	std::cout << "end" << std::endl;
 }
+
+
+// idle
+void Client::idle() {}
 
 
 

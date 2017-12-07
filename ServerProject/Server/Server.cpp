@@ -16,7 +16,8 @@ Server::Server(const std::string & serverIP, const unsigned short serverPort)
 	m_sender_IP(new sf::IpAddress("NoIP")),
 	m_server_port(serverPort),
 	m_sender_port(0),
-	m_nr_clients_connected(0)
+	m_nr_clients_connected(0),
+	m_clock(new sf::Clock())
 {
 	m_socket->bind(m_server_port);
 	m_socket->setBlocking(false);
@@ -31,8 +32,8 @@ Server::Server(const std::string & serverIP, const unsigned short serverPort)
 // dTor
 Server::~Server()
 {
-	SAFE_DEL(m_socket);			SAFE_DEL(m_packet);
-	SAFE_DEL(m_server_IP);		SAFE_DEL(m_sender_IP);
+	SAFE_DEL(m_socket);			SAFE_DEL(m_packet);		SAFE_DEL(m_server_IP);
+	SAFE_DEL(m_sender_IP);		SAFE_DEL(m_clock);
 
 	auto& itr = m_client_map.begin();
 	if (itr != m_client_map.end())
@@ -150,17 +151,46 @@ void Server::init_connect()
 	std::cout << "Player connections established" << std::endl;
 
 	// TESTING
-	for (auto& i : m_client_map)
-		i.second->set_client_state(ClientState::GAME);
+	for (auto& client : m_client_map)
+		client.second->set_client_state(ClientState::START);
+
+	send_packet();
+}
+
+
+// inti game
+void Server::init_game()
+{
+	std::cout << "Completing start game countdown" << std::endl;
+
+	int count = 5;
+	std::string message = "3";
+	m_clock->restart();
+
+	do
+	{
+		if (m_clock->getElapsedTime().asSeconds() > 1)	// count down in seconds, from 3
+		{
+			m_clock->restart();
+			message = std::to_string(count);
+			--count;
+
+			for (auto& client : m_client_map)
+				m_socket->send(message.c_str(), sizeof(message), *client.second->get_IP(), client.second->get_port());
+		}
+	} while (count > -1);
+
+	for (auto& client : m_client_map)
+		client.second->set_client_state(ClientState::GAME);
 
 	send_packet();
 }
 
 
 // run connect
-void Server::run_connect()
+void Server::run_game()
 {
-	std::cout << "Starting game\n" << std::endl;
+	std::cout << "Countdown completed. Game started\n" << std::endl;
 
 	while (true)	// fix this to something useful
 	{
@@ -172,8 +202,9 @@ void Server::run_connect()
 
 
 // run
-void Server::run()
+void Server::run_server()
 {
 	init_connect();
-	run_connect();
+	init_game();
+	run_game();
 }

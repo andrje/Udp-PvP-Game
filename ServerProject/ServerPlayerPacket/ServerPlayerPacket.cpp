@@ -6,7 +6,7 @@ ServerPlayerPacket::ServerPlayerPacket()
 	:
 	m_is_connected_this(false),
 	m_is_connected_other(false),
-	m_current_func(0),
+	m_current_func(3),
 	m_input_x(0),
 	m_input_y(0),
 	m_input_m_1(0),

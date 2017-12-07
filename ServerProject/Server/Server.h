@@ -26,11 +26,13 @@ public:
 	void	update_packet();
 	void	send_packet();
 	void	init_connect();
-	void	run_connect();
-	void	run();
+	void	init_game();
+	void	run_game();
+	void	run_server();
+
 
 private:
-	enum ClientState { START = 0, GAME, END };
+	enum ClientState { START = 0, GAME, END, IDLE };
 
 private:
 	sf::UdpSocket*		m_socket;
@@ -42,6 +44,7 @@ private:
 						m_sender_port;
 
 	size_t				m_nr_clients_connected;
+	sf::Clock*			m_clock;
 
 	ClientMap			m_client_map;
 	SocketMsg			m_socket_msg;
