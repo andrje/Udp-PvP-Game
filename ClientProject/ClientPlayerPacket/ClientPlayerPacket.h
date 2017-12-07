@@ -1,6 +1,5 @@
 #pragma once
 
-#include <vector>
 #include <ostream>
 
 #include "SFML/Network/Packet.hpp"
@@ -14,15 +13,24 @@ struct ClientPlayerPacket
 
 	bool			m_is_connected_this,	// false = disconnected, true = connected
 					m_is_connected_other;
-	int				m_current_func, m_input_x, m_input_y, m_input_m_1;
+
+	int				m_current_func,
+					m_input_x,
+					m_input_y,
+					m_input_m_1,
+					m_bullet_id_this,
+					m_bullet_id_other;
 
 	sf::Vector2f	m_player_pos_this,
-					m_player_pos_other;
+					m_player_pos_other,
+					m_bullet_dir_this,
+					m_bullet_dir_other;
+
+	sf::Vector2i	m_mouse_pos_this;
+
 	float			m_delta_t,
 					m_health_this,
 					m_health_other;
-
-	//std::vector<Bullets*>	m_v_bullets;
 
 	friend std::ostream& operator<<(std::ostream& out, const ClientPlayerPacket& cpp);
 };

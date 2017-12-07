@@ -36,7 +36,6 @@ private:
 
 private:
 	sf::UdpSocket*		m_socket;
-	sf::Socket::Status	m_socket_status;
 	sf::Packet*			m_packet;
 	std::string*		m_server_IP;
 	sf::IpAddress*		m_sender_IP;

@@ -34,7 +34,7 @@ public:
 	void				set_shape_pos(const sf::Vector2f& newPos);
 	void				set_health(const float newHealth);
 	ProjectilesVec&		get_projectiles_vec();
-	void				update_packet_input(std::vector<int>& input, const float deltaT);
+	void				update_packet_input(std::vector<int>& input, sf::RenderWindow& rWin, const float deltaT);
 
 	sf::Vector2f		get_cpp_server_pos_this();
 	sf::Vector2f		get_cpp_server_pos_other();

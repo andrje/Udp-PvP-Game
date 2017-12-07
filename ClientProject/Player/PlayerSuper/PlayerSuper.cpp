@@ -1,5 +1,7 @@
 #include "PlayerSuper.h"
 
+#include "SFML/Window/Mouse.hpp"
+
 // forward
 #include "../../Projectile/Projectile.h"
 #include "../../ClientPlayerPacket/ClientPlayerPacket.h"
@@ -59,11 +61,13 @@ ProjectilesVec& PlayerSuper::get_projectiles_vec()
 
 
 // update packet input
-void PlayerSuper::update_packet_input(std::vector<int>& input, const float deltaT)
+void PlayerSuper::update_packet_input(std::vector<int>& input, sf::RenderWindow& rWin, const float deltaT)
 {
 	m_cpp->m_input_x = input.at(Input::HORI);
 	m_cpp->m_input_y = input.at(Input::VERT);
 	m_cpp->m_input_m_1 = input.at(Input::MOUSE_1);
+
+	m_cpp->m_mouse_pos_this = sf::Mouse::getPosition(rWin);
 
 	m_cpp->m_delta_t = deltaT;
 }

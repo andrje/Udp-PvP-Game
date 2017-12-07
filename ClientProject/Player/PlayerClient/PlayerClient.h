@@ -11,13 +11,13 @@ class PlayerClient : public PlayerSuper
 public:
 	PlayerClient();
 
-	void		dir_input(const float deltaT);
-	void		shoot_input(sf::RenderWindow& rWin);
+	void		player_input(const float deltaT, sf::RenderWindow& rWin);
+	//void		shoot_input(sf::RenderWindow& rWin);
 
 	void		update(const float deltaT, sf::RenderWindow& rWin);
 
 private:
-	std::vector<int>	m_input;
+	std::vector<int>	m_input_vec;
 
 	float				delta_t,
 						m_current_t,

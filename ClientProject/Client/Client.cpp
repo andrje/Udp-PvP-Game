@@ -19,7 +19,7 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	m_win_width(640),
 	m_win_height(360),
 	m_clock(new sf::Clock()),
-	m_tickrate(0.0333),		// 30 = 0.0333 | 60 = 0.0167 | 120 = 0.0083
+	m_tickrate(0.0083),		// 30 = 0.0333 | 60 = 0.0167 | 120 = 0.0083
 	m_framerate(0.0083),
 	m_last_t_tick(0),
 	m_last_t_frame(0),
@@ -84,7 +84,7 @@ void Client::init_connect()
 
 	do
 	{
-		m_socket_status = m_socket->send(*m_player_local->get_packet(), *m_server_IP, m_server_port);
+		m_socket->send(*m_player_local->get_packet(), *m_server_IP, m_server_port);
 
 		if (m_socket->receive(*m_packet, sender_IP, sender_port) == sf::Socket::Done)
 		{
@@ -96,20 +96,17 @@ void Client::init_connect()
 
 	std::string status = has_received ? "Connected to server. Waiting for other player..." : "Server connection timed out. Put another quarter in and try again..";
 	std::cout << status << std::endl;
-
-	// TESTING
-	/*while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
-	m_current_state = (std::size_t)*buffer - '0';*/
 }
 
 
 // send packet
 void Client::send_packet()
 {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
+	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
 		sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+		sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
+		sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		if (m_do_tick)
 		{
@@ -117,6 +114,14 @@ void Client::send_packet()
 				*m_server_IP,
 				m_server_port);
 		}
+	}*/
+
+
+	if (m_do_tick)
+	{
+		m_socket->send(*m_player_local->get_packet(),
+										*m_server_IP,
+										m_server_port);
 	}
 }
 
@@ -128,7 +133,7 @@ void Client::receive_packet()
 	unsigned short sender_port;
 
 	m_packet->clear();
-	m_socket_status = m_socket->receive(*m_packet, sender_IP, sender_port);
+	m_socket->receive(*m_packet, sender_IP, sender_port);
 
 	m_player_local->set_packet(*m_packet);
 }
@@ -150,12 +155,6 @@ void Client::run()
 
 	init_connect();
 
-
-	/*char buffer[1024];
-	size_t received = 0;
-	sf::IpAddress sender_IP;
-	unsigned short sender_port;*/
-
 	while (m_render_win->isOpen())
 	{
 		sf::Event event;
@@ -165,13 +164,11 @@ void Client::run()
 				m_render_win->close();
 		}
 
-
 		// update network
 		send_packet();
 		receive_packet();
 
-		/*while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
-		m_current_state = (std::size_t)*buffer - '0';*/
+		// run current state
 		func_vec[m_player_local->get_current_func()](*this);
 	}
 }
@@ -216,7 +213,7 @@ void Client::start()
 		count_down = (int)*buffer - '0';
 
 		if(count_down > 0)
-			std::cout << count_down << "	";
+			std::cout << count_down << "... ";
 
 	} while (count_down > 0);
 
@@ -231,7 +228,7 @@ void Client::game()
 	m_delta_t += m_first_t - m_last_t;
 
 	// input
-	m_player_local->dir_input(m_delta_t);
+	m_player_local->player_input(m_delta_t, *m_render_win);	// render win for mouse pos
 
 	// get if/what to update
 	check_update_time(m_tickrate, m_framerate);

@@ -38,6 +38,8 @@ public:
 	void			set_client_state(const std::size_t func);
 	bool			get_is_connected();
 
+	void			update_player_pos();
+	void			update_bullet_dir();
 	void			update();
 
 private:

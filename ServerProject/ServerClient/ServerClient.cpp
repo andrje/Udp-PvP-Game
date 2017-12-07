@@ -78,7 +78,10 @@ void ServerClient::set_packet(sf::Packet& packet)
 {
 	packet >> *m_spp;
 
-	//std::cout << *m_spp << '\n' << std::endl;
+	if (m_spp->m_input_m_1 == 1)
+		m_spp->m_bullet_id_this += 1;
+
+	//std::cout << m_spp->m_bullet_id_this << '\n' << std::endl;
 }
 
 
@@ -96,8 +99,8 @@ bool ServerClient::get_is_connected()
 }
 
 
-// update
-void ServerClient::update()
+// update player pos
+void ServerClient::update_player_pos()
 {
 	sf::Vector2f tmp_input;
 	tmp_input.x = m_spp->m_input_x;
@@ -107,4 +110,30 @@ void ServerClient::update()
 		tmp_input /= std::sqrt(tmp_input.x * tmp_input.x + tmp_input.y * tmp_input.y);
 
 	m_spp->m_player_pos_this += tmp_input * SPEED_BASE * m_spp->m_delta_t;
+}
+
+
+// update bullet dir
+void ServerClient::update_bullet_dir()
+{
+	if (m_spp->m_input_m_1 == 1)
+	{
+		sf::Vector2f tmp_bullet_dir;	// because of sf::mouse is vector2i, and has no overload for vector2f
+		tmp_bullet_dir.x = m_spp->m_mouse_pos_this.x;
+		tmp_bullet_dir.y = m_spp->m_mouse_pos_this.y;
+
+		sf::Vector2f tmp_dir = tmp_bullet_dir - m_spp->m_player_pos_this;
+
+		if (tmp_bullet_dir.x != 0 && tmp_bullet_dir.y != 0)
+			tmp_bullet_dir /= std::sqrt(tmp_bullet_dir.x * tmp_bullet_dir.x + tmp_bullet_dir.y * tmp_bullet_dir.y);
+
+		m_spp->m_bullet_dir_this = tmp_bullet_dir;
+	}
+}
+
+
+// update
+void ServerClient::update()
+{
+	update_player_pos();
 }

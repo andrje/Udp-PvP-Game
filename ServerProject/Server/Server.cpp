@@ -85,6 +85,9 @@ void Server::update_packet()
 				itr_other.second->get_spp()->m_player_pos_other =
 					itr_this.second->get_spp()->m_player_pos_this;
 
+				itr_other.second->get_spp()->m_bullet_id_other =
+					itr_this.second->get_spp()->m_bullet_id_this;
+
 				itr_other.second->get_spp()->m_health_other = 
 					itr_this.second->get_spp()->m_health_this;
 			}
@@ -163,13 +166,13 @@ void Server::init_game()
 {
 	std::cout << "Completing start game countdown" << std::endl;
 
-	int count = 5;
+	int count = 3;
 	std::string message = "3";
 	m_clock->restart();
 
 	do
 	{
-		if (m_clock->getElapsedTime().asSeconds() > 1)	// count down in seconds, from 3
+		if (m_clock->getElapsedTime().asSeconds() > 1)	// count down game start in seconds
 		{
 			m_clock->restart();
 			message = std::to_string(count);
