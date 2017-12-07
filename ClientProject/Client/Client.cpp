@@ -19,7 +19,8 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	m_win_width(640),
 	m_win_height(360),
 	m_clock(new sf::Clock()),
-	m_tickrate(0.0083),		// 30 = 0.0333 | 60 = 0.0167 | 120 = 0.0083
+	m_event(new sf::Event()),
+	m_tickrate(0.0167),		// 30 = 0.0333 | 60 = 0.0167 | 120 = 0.0083
 	m_framerate(0.0083),
 	m_last_t_tick(0),
 	m_last_t_frame(0),
@@ -45,19 +46,12 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	m_player_server->render(*m_render_win);
 	m_render_win->display();
 
-
-
-
-//--------------------------------------------
 	std::function<void(Client&)> init_func_ptr = &Client::start;
 	m_funcptr_vec.push_back(init_func_ptr);
-
 	init_func_ptr = &Client::game;
 	m_funcptr_vec.push_back(init_func_ptr);
-
 	init_func_ptr = &Client::end;
 	m_funcptr_vec.push_back(init_func_ptr);
-
 	init_func_ptr = &Client::idle;
 	m_funcptr_vec.push_back(init_func_ptr);
 }
@@ -124,9 +118,8 @@ void Client::send_packet()
 
 	if (m_do_tick)
 	{
-		m_socket->send(*m_player_local->get_packet(),
-										*m_server_IP,
-										m_server_port);
+		if (m_socket->send(*m_player_local->get_packet(), *m_server_IP, m_server_port) == sf::Socket::Done)
+			m_player_local->reset_packet_input();
 	}
 }
 
@@ -162,27 +155,27 @@ void Client::run()
 
 	while (m_render_win->isOpen())
 	{
-		sf::Event event;
-		while (m_render_win->pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				m_render_win->close();
-		}
+		m_first_t = m_clock->getElapsedTime().asSeconds();
+		m_delta_t += m_first_t - m_last_t;
+
+		// sf::Event
+		event_handler();
+
+		// get if/what to update
+		check_update_time(m_tickrate, m_framerate);
+
+		// run current state
+		m_funcptr_vec[m_player_local->get_current_func()](*this);
 
 		// update network
 		send_packet();
 		receive_packet();
 
-		// run current state
-		m_funcptr_vec[m_player_local->get_current_func()](*this);
+		m_last_t = m_clock->getElapsedTime().asSeconds();
 	}
 }
 
 
-
-
-
-//--------------------------------------------
 // start
 void Client::start()
 {
@@ -212,20 +205,7 @@ void Client::start()
 // game
 void Client::game()
 {
-	m_first_t = m_clock->getElapsedTime().asSeconds();
-	m_delta_t += m_first_t - m_last_t;
-
-	// input
-	m_player_local->player_input(m_delta_t, *m_render_win);	// render win for mouse pos
-
-	// get if/what to update
-	check_update_time(m_tickrate, m_framerate);
-
-	// update network
-	send_packet();
-	receive_packet();
-
-	// update render
+	// update player/frame
 	if (m_do_frame)
 	{
 		m_render_win->clear(sf::Color::Cyan);
@@ -242,7 +222,8 @@ void Client::game()
 		m_last_t_frame = m_first_t;
 	}
 
-	m_last_t = m_clock->getElapsedTime().asSeconds();
+	// input
+	m_player_local->get_player_input(m_delta_t, *m_render_win);	// render win for mouse pos
 }
 
 
@@ -255,6 +236,17 @@ void Client::end()
 
 // idle
 void Client::idle() {}
+
+
+// event handler
+void Client::event_handler()
+{
+	while (m_render_win->pollEvent(*m_event))
+	{
+		if (m_event->type == sf::Event::Closed)
+			m_render_win->close();
+	}
+}
 
 
 

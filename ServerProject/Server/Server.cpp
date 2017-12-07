@@ -43,7 +43,7 @@ Server::~Server()
 void Server::receive_packet()
 {
 	m_packet->clear();
-	while (m_socket->receive(*m_packet, *m_sender_IP, m_sender_port) != sf::Socket::Done) {}
+	while(m_socket->receive(*m_packet, *m_sender_IP, m_sender_port) != sf::Socket::Done) {}
 
 	for (auto& itr : m_client_map)
 	{
@@ -74,9 +74,6 @@ void Server::update_packet()
 
 				itr_other.second->get_spp()->m_player_pos_other =
 					itr_this.second->get_spp()->m_player_pos_this;
-
-				itr_other.second->get_spp()->m_bullet_id_other =
-					itr_this.second->get_spp()->m_bullet_id_this;
 
 				itr_other.second->get_spp()->m_health_other = 
 					itr_this.second->get_spp()->m_health_this;
@@ -134,7 +131,7 @@ void Server::init_connect()
 										*m_client_map[sender_port]->get_IP(),
 										m_client_map[sender_port]->get_port());
 
-			std::cout << "Client " << m_nr_clients_connected << " connected." <<
+			std::cout << "Client " << m_nr_clients_connected << " connected" <<
 						"\nIP: " << *m_client_map.find(sender_port)->second->get_IP() <<
 						"\nPort: " << m_client_map.find(sender_port)->second->get_port() <<
 						'\n' << std::endl;

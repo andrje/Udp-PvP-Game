@@ -34,6 +34,8 @@ public:
 	void		end();
 	void		idle();
 
+	void		event_handler();
+
 private:
 	sf::UdpSocket*		m_socket;
 	sf::Packet*			m_packet;
@@ -46,7 +48,10 @@ private:
 	sf::RenderWindow*	m_render_win;
 	size_t				m_win_width,
 						m_win_height;
+
 	sf::Clock*			m_clock;
+	sf::Event*			m_event;
+
 	float				m_tickrate,
 						m_framerate,
 						m_first_t,

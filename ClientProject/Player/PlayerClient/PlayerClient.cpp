@@ -24,7 +24,7 @@ PlayerClient::PlayerClient()
 
 
 // input
-void PlayerClient::player_input(const float deltaT, sf::RenderWindow& rWin)
+void PlayerClient::get_player_input(const float deltaT, sf::RenderWindow& rWin)
 {
 	for (size_t i = 0; i < 3; i++)
 		m_input_vec.at(i) = 0;
@@ -44,7 +44,9 @@ void PlayerClient::player_input(const float deltaT, sf::RenderWindow& rWin)
 		m_input_vec.at(Input::MOUSE_1) = 1;
 	}
 	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_is_shooting)
+	{
 		m_is_shooting = false;
+	}
 
 	update_packet_input(m_input_vec, rWin, deltaT);
 }

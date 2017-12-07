@@ -11,8 +11,7 @@ class PlayerClient : public PlayerSuper
 public:
 	PlayerClient();
 
-	void		player_input(const float deltaT, sf::RenderWindow& rWin);
-	//void		shoot_input(sf::RenderWindow& rWin);
+	void		get_player_input(const float deltaT, sf::RenderWindow& rWin);
 
 	void		update(const float deltaT, sf::RenderWindow& rWin);
 

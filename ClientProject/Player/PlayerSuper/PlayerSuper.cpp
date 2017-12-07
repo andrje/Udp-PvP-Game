@@ -73,6 +73,19 @@ void PlayerSuper::update_packet_input(std::vector<int>& input, sf::RenderWindow&
 }
 
 
+// reset packet input
+void PlayerSuper::reset_packet_input()
+{
+	m_cpp->m_input_x = 0;
+	m_cpp->m_input_y = 0;
+	m_cpp->m_input_m_1 = 0;
+
+	m_cpp->m_mouse_pos_this = sf::Vector2i(0, 0);
+
+	m_cpp->m_delta_t = 0;
+}
+
+
 // get cpp pos this
 sf::Vector2f PlayerSuper::get_cpp_server_pos_this()
 {

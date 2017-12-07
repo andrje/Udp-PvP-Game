@@ -35,6 +35,7 @@ public:
 	void				set_health(const float newHealth);
 	ProjectilesVec&		get_projectiles_vec();
 	void				update_packet_input(std::vector<int>& input, sf::RenderWindow& rWin, const float deltaT);
+	void				reset_packet_input();
 
 	sf::Vector2f		get_cpp_server_pos_this();
 	sf::Vector2f		get_cpp_server_pos_other();
