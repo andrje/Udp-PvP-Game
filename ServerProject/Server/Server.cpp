@@ -77,6 +77,12 @@ void Server::update_packet()
 
 				itr_other.second->get_spp()->m_health_other = 
 					itr_this.second->get_spp()->m_health_this;
+
+				itr_other.second->get_spp()->m_new_bullet_other =
+					itr_this.second->get_spp()->m_new_bullet_this;
+
+				itr_other.second->get_spp()->m_bullet_dir_other =
+					itr_this.second->get_spp()->m_bullet_dir_this;
 			}
 		}
 	}
@@ -87,7 +93,11 @@ void Server::update_packet()
 void Server::send_packet()
 {
 	for (auto& itr : m_client_map)
+	{
 		m_socket->send(*itr.second->get_packet(), *itr.second->get_IP(), itr.second->get_port());
+		itr.second->get_spp()->m_new_bullet_this = 0;	// because im bad at programming
+		itr.second->get_spp()->m_new_bullet_other = 0;
+	}
 }
 
 

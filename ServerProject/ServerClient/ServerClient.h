@@ -39,7 +39,7 @@ public:
 	bool			get_is_connected();
 
 	void			update_player_pos();
-	void			update_bullet_dir();
+	void			update_bullet();
 	void			update();
 
 private:

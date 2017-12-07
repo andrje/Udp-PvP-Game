@@ -10,8 +10,8 @@ ClientPlayerPacket::ClientPlayerPacket()
 	m_input_x(0),
 	m_input_y(0),
 	m_input_m_1(0),
-	m_bullet_id_this(0),
-	m_bullet_id_other(0),
+	m_new_bullet_this(0),
+	m_new_bullet_other(0),
 	m_delta_t(0),
 	m_player_pos_this(-100, -100),	// init spawn outside screen until connection with server is established, server delivers which side (left-right) this player spawns
 	m_player_pos_other(-100, -100),
@@ -51,7 +51,7 @@ sf::Packet& operator>>(sf::Packet& p, ClientPlayerPacket& cpp)
 {
 	return p >> cpp.m_current_func >>
 				cpp.m_player_pos_this.x >> cpp.m_player_pos_this.y >> cpp.m_health_this >>
-				cpp.m_bullet_id_this >> cpp.m_bullet_dir_this.x >> cpp.m_bullet_dir_this.y >>
+				cpp.m_new_bullet_this >> cpp.m_bullet_dir_this.x >> cpp.m_bullet_dir_this.y >>
 				cpp.m_is_connected_other >> cpp.m_player_pos_other.x >> cpp.m_player_pos_other.y >> cpp.m_health_other >>
-				cpp.m_bullet_id_other >> cpp.m_bullet_dir_other.x >> cpp.m_bullet_dir_other.y;
+				cpp.m_new_bullet_other >> cpp.m_bullet_dir_other.x >> cpp.m_bullet_dir_other.y;
 }

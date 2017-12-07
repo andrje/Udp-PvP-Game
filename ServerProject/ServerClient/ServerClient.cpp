@@ -77,11 +77,9 @@ sf::Packet* ServerClient::get_packet()
 void ServerClient::set_packet(sf::Packet& packet)
 {
 	packet >> *m_spp;
-
-	if (m_spp->m_input_m_1 == 1)
-		m_spp->m_bullet_id_this += 1;
-
-	//std::cout << m_spp->m_bullet_id_this << '\n' << std::endl;
+	
+	/*if(m_spp->m_input_m_1 == 1)
+		std::cout << m_spp->m_input_m_1 << '\n' << std::endl;*/
 }
 
 
@@ -114,9 +112,15 @@ void ServerClient::update_player_pos()
 
 
 // update bullet dir
-void ServerClient::update_bullet_dir()
+void ServerClient::update_bullet()
 {
 	if (m_spp->m_input_m_1 == 1)
+	{
+		m_spp->m_new_bullet_this = m_spp->m_input_m_1;
+		m_spp->m_input_m_1 = 0;
+	}
+
+	if (m_spp->m_new_bullet_this == 1)
 	{
 		sf::Vector2f tmp_bullet_dir;	// because of sf::mouse is vector2i, and has no overload for vector2f
 		tmp_bullet_dir.x = m_spp->m_mouse_pos_this.x;
@@ -136,4 +140,5 @@ void ServerClient::update_bullet_dir()
 void ServerClient::update()
 {
 	update_player_pos();
+	update_bullet();
 }

@@ -12,6 +12,7 @@ public:
 	PlayerClient();
 
 	void		get_player_input(const float deltaT, sf::RenderWindow& rWin);
+	void		reset_player_input();
 
 	void		update(const float deltaT, sf::RenderWindow& rWin);
 

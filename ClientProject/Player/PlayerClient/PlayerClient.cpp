@@ -26,9 +26,6 @@ PlayerClient::PlayerClient()
 // input
 void PlayerClient::get_player_input(const float deltaT, sf::RenderWindow& rWin)
 {
-	for (size_t i = 0; i < 3; i++)
-		m_input_vec.at(i) = 0;
-	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		m_input_vec.at(Input::HORI) = -1;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -49,6 +46,14 @@ void PlayerClient::get_player_input(const float deltaT, sf::RenderWindow& rWin)
 	}
 
 	update_packet_input(m_input_vec, rWin, deltaT);
+}
+
+
+// reset
+void PlayerClient::reset_player_input()
+{
+	for (size_t i = 0; i < 3; i++)
+		m_input_vec.at(i) = 0;
 }
 
 

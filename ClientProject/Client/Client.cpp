@@ -119,7 +119,7 @@ void Client::send_packet()
 	if (m_do_tick)
 	{
 		if (m_socket->send(*m_player_local->get_packet(), *m_server_IP, m_server_port) == sf::Socket::Done)
-			m_player_local->reset_packet_input();
+			m_player_local->reset_player_input();
 	}
 }
 
@@ -165,7 +165,7 @@ void Client::run()
 		check_update_time(m_tickrate, m_framerate);
 
 		// run current state
-		m_funcptr_vec[m_player_local->get_current_func()](*this);
+		m_funcptr_vec[m_player_local->get_current_state()](*this);
 
 		// update network
 		send_packet();
@@ -210,10 +210,10 @@ void Client::game()
 	{
 		m_render_win->clear(sf::Color::Cyan);
 
-		m_player_server->update();
-		m_player_local->update(m_delta_t, *m_render_win);
+		m_player_server->update();	// update openent
+		m_player_local->update(m_delta_t, *m_render_win);	// update local player
 
-		m_player_server->render(*m_render_win);
+		m_player_server->render(*m_render_win);	// render
 		m_player_local->render(*m_render_win);
 
 		m_render_win->display();
@@ -222,7 +222,7 @@ void Client::game()
 		m_last_t_frame = m_first_t;
 	}
 
-	// input
+	// get player input
 	m_player_local->get_player_input(m_delta_t, *m_render_win);	// render win for mouse pos
 }
 

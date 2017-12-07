@@ -18,8 +18,8 @@ struct ClientPlayerPacket
 					m_input_x,
 					m_input_y,
 					m_input_m_1,
-					m_bullet_id_this,
-					m_bullet_id_other;
+					m_new_bullet_this,
+					m_new_bullet_other;
 
 	sf::Vector2f	m_player_pos_this,
 					m_player_pos_other,

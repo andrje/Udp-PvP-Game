@@ -54,10 +54,10 @@ void PlayerSuper::set_health(const float newHealth)
 
 
 // get projectiles vec
-ProjectilesVec& PlayerSuper::get_projectiles_vec()
-{
-	return m_projectiles_vec;
-}
+//ProjectilesVec& PlayerSuper::get_projectiles_vec()
+//{
+//	return m_projectiles_vec;
+//}
 
 
 // update packet input
@@ -70,19 +70,6 @@ void PlayerSuper::update_packet_input(std::vector<int>& input, sf::RenderWindow&
 	m_cpp->m_mouse_pos_this = sf::Mouse::getPosition(rWin);
 
 	m_cpp->m_delta_t = deltaT;
-}
-
-
-// reset packet input
-void PlayerSuper::reset_packet_input()
-{
-	m_cpp->m_input_x = 0;
-	m_cpp->m_input_y = 0;
-	m_cpp->m_input_m_1 = 0;
-
-	m_cpp->m_mouse_pos_this = sf::Vector2i(0, 0);
-
-	m_cpp->m_delta_t = 0;
 }
 
 
@@ -128,13 +115,14 @@ sf::Packet* PlayerSuper::get_packet()
 void PlayerSuper::set_packet(sf::Packet& packet)
 {
 	packet >> *m_cpp;
-
-	//std::cout << *m_cpp << '\n' << std::endl;
+	
+	/*if(m_cpp->m_new_bullet_this)
+		std::cout << m_cpp->m_bullet_dir_this.x << std::endl;*/
 }
 
 
 // get current func
-int PlayerSuper::get_current_func()
+int PlayerSuper::get_current_state()
 {
 	return m_cpp->m_current_func;
 }
@@ -152,9 +140,9 @@ void PlayerSuper::render(sf::RenderWindow& rWin)
 {
 	rWin.draw(*m_shape);
 
-	if (m_projectiles_vec.size() > 0)
+	if (m_bullet_vec.size() > 0)
 	{
-		for (auto& pro : m_projectiles_vec)
+		for (auto& pro : m_bullet_vec)
 			rWin.draw(*pro->get_rect());
 	}
 }

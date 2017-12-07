@@ -15,8 +15,8 @@
 class Projectile;
 struct ClientPlayerPacket;
 // typedef
-using ProjectilesVec = std::vector<Projectile*>;
-using Cpp = ClientPlayerPacket;
+using Cpp =			ClientPlayerPacket;
+using BulletVec =	std::vector<Projectile*>;
 // const
 const float SPEED_BASE = 350;
 const float SPEED_DASH = SPEED_BASE * 1.5;
@@ -33,9 +33,7 @@ public:
 
 	void				set_shape_pos(const sf::Vector2f& newPos);
 	void				set_health(const float newHealth);
-	ProjectilesVec&		get_projectiles_vec();
 	void				update_packet_input(std::vector<int>& input, sf::RenderWindow& rWin, const float deltaT);
-	void				reset_packet_input();
 
 	sf::Vector2f		get_cpp_server_pos_this();
 	sf::Vector2f		get_cpp_server_pos_other();
@@ -44,7 +42,7 @@ public:
 
 	sf::Packet*			get_packet();
 	void				set_packet(sf::Packet& packet);
-	int					get_current_func();
+	int					get_current_state();
 	void				set_is_connected(const bool trueFalse);
 
 	void				render(sf::RenderWindow& rWin);
@@ -56,6 +54,6 @@ protected:
 	sf::CircleShape*	m_shape;
 	sf::Packet*			m_packet;
 
-	ProjectilesVec		m_projectiles_vec;
 	static Cpp*			m_cpp;
+	BulletVec			m_bullet_vec;
 };
