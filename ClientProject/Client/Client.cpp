@@ -38,11 +38,6 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 										sf::Style::Default,
 										AA);
 
-	m_socket_msg.push_back(new std::string("done"));
-	m_socket_msg.push_back(new std::string("not ready"));
-	m_socket_msg.push_back(new std::string("disconnected"));
-	m_socket_msg.push_back(new std::string("error"));
-
 	m_player_local = new PlayerClient();
 	m_player_server = new PlayerServer();
 
@@ -54,7 +49,17 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 
 
 //--------------------------------------------
-	init_func_ptrs();
+	std::function<void(Client&)> init_func_ptr = &Client::start;
+	m_funcptr_vec.push_back(init_func_ptr);
+
+	init_func_ptr = &Client::game;
+	m_funcptr_vec.push_back(init_func_ptr);
+
+	init_func_ptr = &Client::end;
+	m_funcptr_vec.push_back(init_func_ptr);
+
+	init_func_ptr = &Client::idle;
+	m_funcptr_vec.push_back(init_func_ptr);
 }
 
 
@@ -169,7 +174,7 @@ void Client::run()
 		receive_packet();
 
 		// run current state
-		func_vec[m_player_local->get_current_func()](*this);
+		m_funcptr_vec[m_player_local->get_current_func()](*this);
 	}
 }
 
@@ -178,23 +183,6 @@ void Client::run()
 
 
 //--------------------------------------------
-// init func ptrs
-void Client::init_func_ptrs()
-{
-	std::function<void(Client&)> func_ptr = &Client::start;
-	func_vec.push_back(func_ptr);
-
-	func_ptr = &Client::game;
-	func_vec.push_back(func_ptr);
-
-	func_ptr = &Client::end;
-	func_vec.push_back(func_ptr);
-
-	func_ptr = &Client::idle;
-	func_vec.push_back(func_ptr);
-}
-
-
 // start
 void Client::start()
 {

@@ -13,7 +13,6 @@ class ServerClient;
 enum SocketStatus;
 // typedef
 using ClientMap = std::map<unsigned short, ServerClient*>;
-using SocketMsg = std::vector<std::string*>;
 
 
 class Server
@@ -46,5 +45,4 @@ private:
 	sf::Clock*			m_clock;
 
 	ClientMap			m_client_map;
-	SocketMsg			m_socket_msg;
 };

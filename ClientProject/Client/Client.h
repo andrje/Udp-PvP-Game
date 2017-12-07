@@ -10,8 +10,9 @@
 // forward
 class PlayerClient;
 class PlayerServer;
+class Client;
 // typedef
-using SocketMsg = std::vector<std::string*>;
+using FuncPtrVec = std::vector <std::function<void(Client&)>>;
 
 
 class Client
@@ -28,7 +29,6 @@ public:
 	void		check_update_time(const float tickRate, const float frameRate);
 	void		run();
 
-	void		init_func_ptrs();
 	void		start();
 	void		game();
 	void		end();
@@ -36,7 +36,6 @@ public:
 
 private:
 	sf::UdpSocket*		m_socket;
-	//sf::Socket::Status	m_socket_status;
 	sf::Packet*			m_packet;
 	std::string*		m_client_IP;
 	std::string*		m_server_IP;
@@ -59,11 +58,9 @@ private:
 	bool				m_do_tick,
 						m_do_frame;
 
-	SocketMsg			m_socket_msg;
-
 private:
 	PlayerClient*		m_player_local;
 	PlayerServer*		m_player_server;
 
-	std::vector <std::function<void(Client&)>> func_vec;
+	FuncPtrVec			m_funcptr_vec;
 };

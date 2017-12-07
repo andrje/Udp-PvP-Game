@@ -21,11 +21,6 @@ Server::Server(const std::string & serverIP, const unsigned short serverPort)
 {
 	m_socket->bind(m_server_port);
 	m_socket->setBlocking(false);
-
-	m_socket_msg.push_back(new std::string("done"));
-	m_socket_msg.push_back(new std::string("not ready"));
-	m_socket_msg.push_back(new std::string("disconnected"));
-	m_socket_msg.push_back(new std::string("error"));
 }
 
 
@@ -40,11 +35,6 @@ Server::~Server()
 	{
 		SAFE_DEL(itr->second);
 		m_client_map.erase(itr);
-	}
-
-	for (auto& msg : m_socket_msg)
-	{
-		SAFE_DEL(msg);
 	}
 }
 
