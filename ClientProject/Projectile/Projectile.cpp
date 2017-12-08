@@ -13,7 +13,7 @@
 Projectile::Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, const sf::Vector2f& size, const sf::Color& color)
 	:
 	m_clock(new sf::Clock()),
-	m_max_life(4),
+	m_max_life(45),
 	m_bounces(0),
 	m_max_bounces(2),
 	m_player_size(30),
