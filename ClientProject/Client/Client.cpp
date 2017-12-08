@@ -233,14 +233,14 @@ void Client::end()
 {
 	if (m_player_server->get_cpp_health_other() == 0)
 	{
-		std::cout << "hej" << std::endl;
 		std::string message = (m_player_server->get_cpp_health_other() == 0) ? "You win!" : "You loose!";
-		message.append("Game Over and good bye");
+		message.append(" Game Over and good bye");
 		std::cout << message << std::endl;
-		//
 	}
 
-	m_clock->restart();
-
-	while (m_clock->getElapsedTime().asSeconds() < 3) {}
+	while (m_render_win->isOpen())
+	{
+		// sf::Event
+		event_handler();
+	}
 }
