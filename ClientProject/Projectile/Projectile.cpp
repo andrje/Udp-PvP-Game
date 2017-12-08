@@ -1,4 +1,5 @@
 #include <cmath>
+#include <vector>
 
 #include "Projectile.h"
 
@@ -12,9 +13,12 @@
 Projectile::Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, const sf::Vector2f& size, const sf::Color& color)
 	:
 	m_clock(new sf::Clock()),
-	m_max_life(4), m_bounces(0),
+	m_max_life(4),
+	m_bounces(0),
 	m_max_bounces(2),
-	m_destroy_self(false)
+	m_player_size(30),
+	m_destroy_self(false),
+	m_player_pos(new sf::Vector2f())
 {
 	m_pos = new sf::Vector2f(spawnPos);
 	m_dir = new sf::Vector2f(dir);
@@ -24,6 +28,8 @@ Projectile::Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, co
 	m_rect_shape->setOrigin(m_rect_size->x / 2, m_rect_size->y / 2);
 	m_rect_shape->setFillColor(color);
 	m_rect_shape->setPosition(*m_pos);
+
+	m_player_half = m_player_size / 2;
 }
 
 
@@ -63,6 +69,27 @@ const void Projectile::bounce(sf::RenderWindow& rWin)
 }
 
 
+// hit detection
+const bool Projectile::is_hit()
+{
+	sf::Vector2u mid(m_player_pos->x, m_player_pos->y);	// range based hit detction
+	int half, upper, downer, righter, lefter;
+
+	upper = mid.y - m_player_half;
+	downer = mid.y + m_player_half;
+	righter = mid.x + m_player_half;
+	lefter = mid.x - m_player_half;
+
+	if (m_pos->y >= upper	&&	m_pos->y <= downer &&
+		m_pos->x <= righter &&	m_pos->x >= lefter)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
 // destroy self
 const bool Projectile::destroy_self()
 {
@@ -89,12 +116,15 @@ sf::Vector2f* Projectile::get_dir()
 
 
 // update
-void Projectile::update(const float deltaT, sf::RenderWindow& rWin)
+void Projectile::update(const float deltaT, sf::RenderWindow& rWin, const sf::Vector2f& playerPos, const std::size_t playerSize)
 {
 	bounce(rWin);
 
 	*m_pos += *m_dir * PROJECTILE_MAX_SPEED * deltaT;
 	m_rect_shape->setPosition(*m_pos);
+
+	*m_player_pos = playerPos;
+	is_hit();
 }
 
 

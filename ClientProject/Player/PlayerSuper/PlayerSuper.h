@@ -58,4 +58,6 @@ protected:
 	BulletVec			m_bullet_vec;
 	static bool			m_new_bullet_this,
 						m_new_bullet_other;
+
+	std::size_t			m_player_size;
 };

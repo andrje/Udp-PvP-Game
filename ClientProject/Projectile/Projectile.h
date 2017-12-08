@@ -20,12 +20,13 @@ public:
 	~Projectile();
 
 	const void			bounce(sf::RenderWindow& rWin);
+	const bool			is_hit();
 	const bool			destroy_self();
 
-	sf::RectangleShape* get_rect();
+	sf::RectangleShape*	get_rect();
 	sf::Vector2f*		get_dir();
 
-	void				update(const float deltaT, sf::RenderWindow& rWin);
+	void				update(const float deltaT, sf::RenderWindow& rWin, const sf::Vector2f& pos, const std::size_t size);
 	void				render(sf::RenderWindow& rWin);
 
 private:
@@ -36,12 +37,15 @@ private:
 	sf::Vector2f*		m_rect_size;
 	sf::Vector2f*		m_dir;
 	sf::Vector2f*		m_pos;
+	sf::Vector2f*		m_player_pos;
 
 	float				m_speed,
 						m_max_life;
 
 	size_t				m_bounces,
-						m_max_bounces;
+						m_max_bounces,
+						m_player_size,
+						m_player_half;
 
 	bool				m_destroy_self;
 };

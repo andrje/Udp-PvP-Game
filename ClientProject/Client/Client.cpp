@@ -42,7 +42,7 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	m_player_local = new PlayerClient();
 	m_player_server = new PlayerServer();
 
-	m_render_win->clear(sf::Color::Cyan);
+	m_render_win->clear(sf::Color(30, 30, 30));
 	m_player_server->render(*m_render_win);
 	m_render_win->display();
 
@@ -162,7 +162,7 @@ void Client::game()
 	// update player/frame
 	if (m_do_frame)
 	{
-		m_render_win->clear(sf::Color::White);
+		m_render_win->clear(sf::Color(32, 32, 32));
 
 		m_player_server->update(*m_render_win, m_delta_t);	// update oponent
 		m_player_local->update(*m_render_win, m_delta_t);	// update this player

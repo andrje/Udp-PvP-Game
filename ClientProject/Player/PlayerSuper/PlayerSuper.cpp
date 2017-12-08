@@ -17,7 +17,8 @@ bool PlayerSuper::m_new_bullet_other = false;
 PlayerSuper::PlayerSuper()
 	:
 	m_shape(new sf::CircleShape()),
-	m_packet(new sf::Packet())
+	m_packet(new sf::Packet()),
+	m_player_size(30)
 {}
 
 
