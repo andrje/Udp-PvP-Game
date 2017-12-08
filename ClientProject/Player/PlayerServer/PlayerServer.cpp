@@ -41,7 +41,7 @@ void PlayerServer::update_projectiles(sf::RenderWindow & rWin, const float delta
 void PlayerServer::update(sf::RenderWindow& rWin, const float deltaT)
 {
 	set_shape_pos(get_cpp_pos_other());
-	set_health(get_cpp_health_other());
+	set_health_other(get_cpp_health_other());
 
 	update_projectiles(rWin, deltaT);
 }

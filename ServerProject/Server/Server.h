@@ -27,6 +27,7 @@ public:
 	void	init_connect();
 	void	init_game();
 	void	run_game();
+	void	end_game();
 	void	run_server();
 
 
@@ -46,4 +47,6 @@ private:
 	sf::Clock*			m_clock;
 
 	ClientMap			m_client_map;
+
+	bool				m_game_over;
 };

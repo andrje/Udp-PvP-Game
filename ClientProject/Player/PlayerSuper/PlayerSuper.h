@@ -28,7 +28,8 @@ public:
 	void				init_shape(const float radius, const size_t pointCount, const sf::Color& color);
 
 	void				set_shape_pos(const sf::Vector2f& newPos);
-	void				set_health(const float newHealth);
+	void				set_health_this(const float newHealth);
+	void				set_health_other(const float newHealth);
 
 	void				update_packet_input(std::vector<int>& input, sf::RenderWindow& rWin, const float deltaT);
 

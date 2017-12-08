@@ -50,9 +50,16 @@ void PlayerSuper::set_shape_pos(const sf::Vector2f& newPos)
 
 
 // set health
-void PlayerSuper::set_health(const float newHealth)
+void PlayerSuper::set_health_this(const float newHealth)
 {
 	m_cpp->m_health_this = newHealth;
+}
+
+
+// set health other
+void PlayerSuper::set_health_other(const float newHealth)
+{
+	m_cpp->m_health_other = newHealth;
 }
 
 

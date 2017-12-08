@@ -42,7 +42,7 @@ sf::Packet& operator<<(sf::Packet& p, const ClientPlayerPacket& cpp)
 {
 	return p << cpp.m_is_connected_this << cpp.m_input_x << cpp.m_input_y <<
 				cpp.m_input_m_1 << cpp.m_mouse_pos_this.x << cpp.m_mouse_pos_this.y <<
-				cpp.m_delta_t << cpp.m_health_this;
+				cpp.m_delta_t << cpp.m_health_this << cpp.m_health_other;
 }
 
 

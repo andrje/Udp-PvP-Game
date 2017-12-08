@@ -17,7 +17,8 @@ Server::Server(const std::string & serverIP, const unsigned short serverPort)
 	m_server_port(serverPort),
 	m_sender_port(0),
 	m_nr_clients_connected(0),
-	m_clock(new sf::Clock())
+	m_clock(new sf::Clock()),
+	m_game_over(false)
 {
 	m_socket->bind(m_server_port);
 	m_socket->setBlocking(false);
@@ -60,7 +61,19 @@ void Server::receive_packet()
 void Server::update_packet()
 {
 	for (auto& itr : m_client_map)	// update pos, health etc etc
+	{
 		itr.second->update();
+
+		if (itr.second->get_spp()->m_health_other == 0)	// end game if some player health is zero
+		{
+			for (auto& itr : m_client_map)
+				itr.second->set_client_state(ClientState::END);
+
+			m_game_over = true;
+		}
+	}
+
+
 
 	for (auto& itr_this : m_client_map)	// copy P1's P1 data to P2's P1 data, and vice versa
 	{
@@ -74,9 +87,6 @@ void Server::update_packet()
 
 				itr_other.second->get_spp()->m_player_pos_other =
 					itr_this.second->get_spp()->m_player_pos_this;
-
-				itr_other.second->get_spp()->m_health_other = 
-					itr_this.second->get_spp()->m_health_this;
 
 				itr_other.second->get_spp()->m_new_bullet_other =
 					itr_this.second->get_spp()->m_new_bullet_this;
@@ -95,7 +105,7 @@ void Server::send_packet()
 	for (auto& itr : m_client_map)
 	{
 		m_socket->send(*itr.second->get_packet(), *itr.second->get_IP(), itr.second->get_port());
-		itr.second->get_spp()->m_new_bullet_this = 0;	// because im bad at programming
+		itr.second->get_spp()->m_new_bullet_this = 0;	// because im bad at programming and unsure if this resets properly otherwise
 		itr.second->get_spp()->m_new_bullet_other = 0;
 	}
 }
@@ -150,7 +160,7 @@ void Server::init_connect()
 
 	std::cout << "Player connections established" << std::endl;
 
-	// TESTING
+	// switch state on client side
 	for (auto& client : m_client_map)
 		client.second->set_client_state(ClientState::START);
 
@@ -197,7 +207,22 @@ void Server::run_game()
 		receive_packet();
 		update_packet();
 		send_packet();
+
+		if (m_game_over)
+		{
+			//receive_packet();
+			//update_packet();
+			send_packet();
+			break;
+		}
 	}
+}
+
+
+// end game
+void Server::end_game()
+{
+	std::cout << "Some win, some loose. Game Over" << std::endl;
 }
 
 
@@ -207,4 +232,5 @@ void Server::run_server()
 	init_connect();
 	init_game();
 	run_game();
+	end_game();
 }

@@ -24,19 +24,15 @@ public:
 	void		init_connect();
 	void		send_packet();
 	void		receive_packet();
-	void		packet_status(const char socketTransferType, sf::Socket::Status& status);
 
 	void		check_update_time(const float tickRate, const float frameRate);
 
+	void		event_handler();
 	void		start();
 	void		game();
-	void		end();
-	void		idle();
-
-	void		event_handler();
-
 	void		run_client();
-
+	void		idle();
+	void		end();
 
 private:
 	sf::UdpSocket*		m_socket;
@@ -63,7 +59,8 @@ private:
 						m_delta_t;
 
 	bool				m_do_tick,
-						m_do_frame;
+						m_do_frame,
+						m_game_over;
 
 private:
 	PlayerClient*		m_player_local;

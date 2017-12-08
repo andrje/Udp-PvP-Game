@@ -26,7 +26,8 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	m_last_t_frame(0),
 	m_delta_t(0),
 	m_do_tick(false),
-	m_do_frame(false)
+	m_do_frame(false),
+	m_game_over(false)
 {
 	m_socket->bind(sf::Socket::AnyPort);
 	m_socket->setBlocking(false);
@@ -130,6 +131,17 @@ void Client::check_update_time(const float tickRate, const float frameRate)
 }
 
 
+// event handler
+void Client::event_handler()
+{
+	while (m_render_win->pollEvent(*m_event))
+	{
+		if (m_event->type == sf::Event::Closed)
+			m_render_win->close();
+	}
+}
+
+
 // start
 void Client::start()
 {
@@ -181,26 +193,8 @@ void Client::game()
 }
 
 
-// end
-void Client::end()
-{
-	std::cout << "end" << std::endl;
-}
-
-
 // idle
 void Client::idle() {}
-
-
-// event handler
-void Client::event_handler()
-{
-	while (m_render_win->pollEvent(*m_event))
-	{
-		if (m_event->type == sf::Event::Closed)
-			m_render_win->close();
-	}
-}
 
 
 // run client
@@ -234,101 +228,19 @@ void Client::run_client()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// packet_status
-void Client::packet_status(const char socketTransferType, sf::Socket::Status& status)
+// end
+void Client::end()
 {
-	switch (status)
+	if (m_player_server->get_cpp_health_other() == 0)
 	{
-		// Done
-	case sf::Socket::Done:
-
-		/*if (socketTransferType == 'r')
-		m_player_local->set_packet(*m_packet);*/
-
-		break;
-		// NotReady
-	case sf::Socket::NotReady:
-		break;
-		// Disconnected
-	case sf::Socket::Disconnected:
-		break;
-		// Error
-	case sf::Socket::Error:
-		break;
-		// Default
-	default:
-		std::cout << "Something broke in switch Server::socket_status()" << std::endl;
+		std::cout << "hej" << std::endl;
+		std::string message = (m_player_server->get_cpp_health_other() == 0) ? "You win!" : "You loose!";
+		message.append("Game Over and good bye");
+		std::cout << message << std::endl;
+		//
 	}
 
-	std::string type = socketTransferType == 'r' ? "recieve " : "send ";	// print socket status for current function
-																			//std::cout << "Socket " << type << *m_socket_msg.at(status) << std::endl;
+	m_clock->restart();
+
+	while (m_clock->getElapsedTime().asSeconds() < 3) {}
 }
-
-
-//while (m_render_win->isOpen())
-//{
-//	m_first_t = m_clock->getElapsedTime().asSeconds();
-//	m_delta_t += m_first_t - m_last_t;
-
-//	sf::Event event;
-//	while (m_render_win->pollEvent(event))
-//	{
-//		if (event.type == sf::Event::Closed)
-//			m_render_win->close();
-//	}
-
-//	
-//	// input
-//	m_player_local->dir_input(m_delta_t);
-//	// shoot TEST
-//	//m_player_local->shoot_input(*m_render_win);	// render win to get mouse pos
-
-
-
-//	// get if/what to update
-//	check_update_time(m_tickrate, m_framerate);
-
-//	// update network
-//	send_packet();
-//	receive_packet();
-
-//	// update render
-//	if (m_do_frame)
-//	{
-//		m_render_win->clear(sf::Color::Cyan);
-
-//		m_player_server->update();
-//		m_player_local->update(m_delta_t, *m_render_win);
-
-//		m_player_server->render(*m_render_win);
-//		m_player_local->render(*m_render_win);
-
-//		m_render_win->display();
-
-//		m_delta_t = 0;
-//		m_last_t_frame = m_first_t;
-//	}
-
-//	m_last_t = m_clock->getElapsedTime().asSeconds();
-
-//	//std::cout << "main" << std::endl;
-//}
