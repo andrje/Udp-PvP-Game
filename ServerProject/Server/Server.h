@@ -42,6 +42,7 @@ private:
 						m_sender_port;
 
 	size_t				m_nr_clients_connected;
+
 	sf::Clock*			m_clock;
 
 	ClientMap			m_client_map;

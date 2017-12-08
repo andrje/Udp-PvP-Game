@@ -35,7 +35,7 @@ Client::Client(const std::string& serverIP, const unsigned short serverPort)
 	sf::ContextSettings AA;
 	AA.antialiasingLevel = 8;
 	m_render_win = new sf::RenderWindow(sf::VideoMode(m_win_width, m_win_height),
-										"Skjut som fan 2.0",
+										"Skjut som fan",
 										sf::Style::Default,
 										AA);
 
@@ -101,25 +101,10 @@ void Client::init_connect()
 // send packet
 void Client::send_packet()
 {
-	/*if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::D) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::W) ||
-		sf::Keyboard::isKeyPressed(sf::Keyboard::S) ||
-		sf::Mouse::isButtonPressed(sf::Mouse::Left))
-	{
-		if (m_do_tick)
-		{
-			m_socket_status = m_socket->send(*m_player_local->get_packet(),
-				*m_server_IP,
-				m_server_port);
-		}
-	}*/
-
-
-	if (m_do_tick)
+	if (m_do_tick)	// tickrate
 	{
 		if (m_socket->send(*m_player_local->get_packet(), *m_server_IP, m_server_port) == sf::Socket::Done)
-			m_player_local->reset_player_input();
+			m_player_local->reset_player_input();	// an atempt at not missing player inputs without sf::Event, not so great result
 	}
 }
 
@@ -177,7 +162,7 @@ void Client::game()
 	// update player/frame
 	if (m_do_frame)
 	{
-		m_render_win->clear(sf::Color::Cyan);
+		m_render_win->clear(sf::Color::White);
 
 		m_player_server->update(*m_render_win, m_delta_t);	// update oponent
 		m_player_local->update(*m_render_win, m_delta_t);	// update this player

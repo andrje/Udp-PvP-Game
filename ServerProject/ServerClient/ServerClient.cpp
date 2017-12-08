@@ -8,14 +8,17 @@
 
 // cTor
 ServerClient::ServerClient(const std::string& ip,
-							const unsigned short port,
-							const size_t clientNr,
-							const sf::Vector2f& spawnPosThis,
-							const sf::Vector2f& spawnPosOther)
+	const unsigned short port,
+	const size_t clientNr,
+	const sf::Vector2f& spawnPosThis,
+	const sf::Vector2f& spawnPosOther)
 	:
 	m_IP(new std::string(ip)),
 	m_port(port),
 	m_client_nr(clientNr),
+	m_win_width(640),
+	m_win_height(360),
+	m_player_size(30),
 	m_spp(new Spp()),
 	m_packet(new sf::Packet())
 {
@@ -108,6 +111,18 @@ void ServerClient::update_player_pos()
 		tmp_input /= std::sqrt(tmp_input.x * tmp_input.x + tmp_input.y * tmp_input.y);
 
 	m_spp->m_player_pos_this += tmp_input * SPEED_BASE * m_spp->m_delta_t;
+
+	if (m_spp->m_player_pos_this.x < m_player_size)
+		m_spp->m_player_pos_this.x = m_player_size;
+
+	if (m_spp->m_player_pos_this.x > m_win_width - m_player_size)
+		m_spp->m_player_pos_this.x = m_win_width - m_player_size;
+
+	if (m_spp->m_player_pos_this.y < m_player_size)
+		m_spp->m_player_pos_this.y = m_player_size;
+
+	if (m_spp->m_player_pos_this.y > m_win_height - m_player_size)
+		m_spp->m_player_pos_this.y = m_win_height - m_player_size;
 }
 
 

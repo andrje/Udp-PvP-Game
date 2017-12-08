@@ -16,7 +16,7 @@ PlayerClient::PlayerClient()
 	m_current_t(0),
 	m_last_t(0)
 {
-	init_shape(30, 4, sf::Color::Magenta);
+	init_shape(30, 4, sf::Color::Blue);
 
 	for (size_t i = 0; i < 3; i++)
 		m_input_vec.push_back(0);
@@ -62,7 +62,7 @@ void PlayerClient::update_projectiles(sf::RenderWindow & rWin, const float delta
 {
 	if (m_new_bullet_this)	// spawn new bullet
 	{
-		Projectile* projectile = new Projectile(get_cpp_pos_this(), get_cpp_bullet_dir_this(), sf::Vector2f(10, 10));
+		Projectile* projectile = new Projectile(get_cpp_pos_this(), get_cpp_bullet_dir_this(), sf::Vector2f(10, 10), sf::Color::Blue);
 		m_bullet_vec.push_back(projectile);
 
 		m_new_bullet_this = false;
@@ -91,31 +91,3 @@ void PlayerClient::update(sf::RenderWindow& rWin, const float deltaT)
 
 	update_projectiles(rWin, deltaT);
 }
-
-
-
-
-
-
-
-
-
-// shoot
-//void PlayerClient::shoot_input(sf::RenderWindow& rWin)
-//{
-//	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !m_is_shooting)
-//	{
-//		m_is_shooting = true;
-//		sf::Vector2i mouse_pos = sf::Mouse::getPosition(rWin);
-//
-//		Projectile* projectile = new Projectile(get_cpp_server_pos_this(),
-//												sf::Vector2f(mouse_pos.x, mouse_pos.y),
-//												sf::Vector2f(10, 10));
-//
-//		m_projectiles_vec.push_back(projectile);
-//	}
-//	else if (!sf::Mouse::isButtonPressed(sf::Mouse::Left) && m_is_shooting)
-//	{
-//		m_is_shooting = false;
-//	}
-//}

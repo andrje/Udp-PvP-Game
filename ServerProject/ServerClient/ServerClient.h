@@ -44,7 +44,10 @@ private:
 	std::string*	m_IP;
 	unsigned short	m_port;
 
-	size_t			m_client_nr;
+	size_t			m_client_nr,
+					m_win_width,
+					m_win_height,
+					m_player_size;
 
 	Spp*			m_spp;
 	sf::Packet*		m_packet;

@@ -9,7 +9,7 @@
 
 
 // cTor
-Projectile::Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, const sf::Vector2f& size)
+Projectile::Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, const sf::Vector2f& size, const sf::Color& color)
 	:
 	m_clock(new sf::Clock()),
 	m_max_life(4), m_bounces(0),
@@ -22,7 +22,7 @@ Projectile::Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, co
 
 	m_rect_shape = new sf::RectangleShape(sf::Vector2f(*m_rect_size));
 	m_rect_shape->setOrigin(m_rect_size->x / 2, m_rect_size->y / 2);
-	m_rect_shape->setFillColor(sf::Color::Black);
+	m_rect_shape->setFillColor(color);
 	m_rect_shape->setPosition(*m_pos);
 }
 

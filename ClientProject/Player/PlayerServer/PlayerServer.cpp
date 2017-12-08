@@ -6,7 +6,7 @@
 // CTor
 PlayerServer::PlayerServer()
 {
-	init_shape(30, 4, sf::Color::Yellow);
+	init_shape(30, 4, sf::Color::Magenta);
 }
 
 
@@ -15,7 +15,7 @@ void PlayerServer::update_projectiles(sf::RenderWindow & rWin, const float delta
 {
 	if (m_new_bullet_other)	// spawn new bullet
 	{
-		Projectile* projectile = new Projectile(get_cpp_pos_other(), get_cpp_bullet_dir_other(), sf::Vector2f(10, 10));
+		Projectile* projectile = new Projectile(get_cpp_pos_other(), get_cpp_bullet_dir_other(), sf::Vector2f(10, 10), sf::Color::Magenta);
 		m_bullet_vec.push_back(projectile);
 
 		m_new_bullet_other = false;

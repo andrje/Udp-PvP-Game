@@ -16,7 +16,7 @@ const float PROJECTILE_MAX_SPEED = 50000;
 class Projectile
 {
 public:
-	Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, const sf::Vector2f& size);
+	Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, const sf::Vector2f& size, const sf::Color& color);
 	~Projectile();
 
 	const void			bounce(sf::RenderWindow& rWin);
