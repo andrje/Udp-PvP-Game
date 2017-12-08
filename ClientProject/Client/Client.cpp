@@ -156,6 +156,8 @@ void Client::start()
 
 	do
 	{
+		event_handler();
+
 		while (m_socket->receive(buffer, sizeof(buffer), received, sender_IP, sender_port) != sf::Socket::Done) {}
 		count_down = (int)*buffer - '0';
 

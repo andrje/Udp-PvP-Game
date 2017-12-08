@@ -64,13 +64,13 @@ void Server::update_packet()
 	{
 		itr.second->update();
 
-		if (itr.second->get_spp()->m_health_other == 0)	// end game if some player health is zero
-		{
-			for (auto& itr : m_client_map)
-				itr.second->set_client_state(ClientState::END);
+		//if (itr.second->get_spp()->m_health_other == 0)	// end game if some player health is zero
+		//{
+		//	for (auto& itr : m_client_map)
+		//		itr.second->set_client_state(ClientState::END);
 
-			m_game_over = true;
-		}
+		//	m_game_over = true;
+		//}
 	}
 
 
@@ -140,7 +140,7 @@ void Server::init_connect()
 				spawn_pos_2 = spawn_1;
 			}
 
-			m_client_map.insert(std::make_pair(sender_port,
+			m_client_map.insert(std::make_pair(sender_port,		// add new server side client
 												new ServerClient(sender_IP.toString(),
 																sender_port,
 																m_nr_clients_connected,
@@ -210,8 +210,6 @@ void Server::run_game()
 
 		if (m_game_over)
 		{
-			//receive_packet();
-			//update_packet();
 			send_packet();
 			break;
 		}

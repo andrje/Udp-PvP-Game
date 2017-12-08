@@ -73,10 +73,7 @@ void PlayerClient::update_projectiles(sf::RenderWindow & rWin, const float delta
 		m_bullet_vec.at(i)->update(deltaT, rWin, get_cpp_pos_other(), m_player_size);	// update
 
 		if (m_bullet_vec.at(i)->is_hit())	// hit detection
-		{
 			set_health_other(0);
-			//std::cout << get_cpp_health_other() << std::endl;
-		}
 
 		if (m_bullet_vec.at(i)->destroy_self())	// destroy
 		{

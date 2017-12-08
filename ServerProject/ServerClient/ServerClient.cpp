@@ -70,8 +70,6 @@ sf::Packet* ServerClient::get_packet()
 	m_packet->clear();
 	*m_packet << *m_spp;
 
-	//std::cout << *m_spp << '\n' << std::endl;
-
 	return m_packet;
 }
 
@@ -80,9 +78,6 @@ sf::Packet* ServerClient::get_packet()
 void ServerClient::set_packet(sf::Packet& packet)
 {
 	packet >> *m_spp;
-	
-	/*if(m_spp->m_input_m_1 == 1)
-		std::cout << m_spp->m_input_m_1 << '\n' << std::endl;*/
 }
 
 
@@ -112,7 +107,7 @@ void ServerClient::update_player_pos()
 
 	m_spp->m_player_pos_this += tmp_input * SPEED_BASE * m_spp->m_delta_t;
 
-	if (m_spp->m_player_pos_this.x < m_player_size)
+	if (m_spp->m_player_pos_this.x < m_player_size)		// player window bounds check
 		m_spp->m_player_pos_this.x = m_player_size;
 
 	if (m_spp->m_player_pos_this.x > m_win_width - m_player_size)
@@ -137,7 +132,7 @@ void ServerClient::update_bullet()
 
 	if (m_spp->m_new_bullet_this == 1)
 	{
-		sf::Vector2f tmp_mouse;	// because of sf::mouse is vector2i, and has no overload for vector2f
+		sf::Vector2f tmp_mouse;	// because sf::mouse is vector2i, and has no overload for vector2f
 		tmp_mouse.x = m_spp->m_mouse_pos_this.x;
 		tmp_mouse.y = m_spp->m_mouse_pos_this.y;
 

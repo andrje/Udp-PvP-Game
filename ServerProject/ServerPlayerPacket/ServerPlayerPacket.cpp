@@ -33,20 +33,6 @@ ServerPlayerPacket::~ServerPlayerPacket()
 }
 
 
-// ostream
-std::ostream& operator<<(std::ostream& out, const ServerPlayerPacket& cpp)
-{
-	return out << "This: " << '(' <<
-						cpp.m_player_pos_this.x << ", " <<
-						cpp.m_player_pos_this.y << "), Health: " <<
-						cpp.m_health_this << "\n"
-				<< "Other: " << '(' <<
-						cpp.m_player_pos_other.x << ", " <<
-						cpp.m_player_pos_other.y << "), Health: " <<
-						cpp.m_health_other << "\n" << std::endl;
-}
-
-
 // send packet
 sf::Packet& operator<<(sf::Packet& p, const ServerPlayerPacket& cpp)
 {

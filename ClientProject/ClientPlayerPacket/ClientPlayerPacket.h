@@ -31,8 +31,6 @@ struct ClientPlayerPacket
 	float			m_delta_t,
 					m_health_this,
 					m_health_other;
-
-	friend std::ostream& operator<<(std::ostream& out, const ClientPlayerPacket& cpp);
 };
 
 
