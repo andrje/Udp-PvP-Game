@@ -6,19 +6,17 @@
 
 #define SAFE_DEL(x) delete x; x = nullptr;
 
-// forwarded
+// forward
 class Player;
 class Client;
-
+// const
 const float PROJECTILE_MAX_SPEED = 500;
 
 
 class Projectile
 {
 public:
-	Projectile(const sf::Vector2f& spawnPos,
-				const sf::Vector2f& mousePos,
-				const sf::Vector2f& size);
+	Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, const sf::Vector2f& size);
 	~Projectile();
 
 	const void			bounce(sf::RenderWindow& rWin);

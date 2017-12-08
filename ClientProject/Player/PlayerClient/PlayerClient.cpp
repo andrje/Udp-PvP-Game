@@ -57,6 +57,53 @@ void PlayerClient::reset_player_input()
 }
 
 
+// handle bullets
+void PlayerClient::update_projectiles(sf::RenderWindow & rWin, const float deltaT)
+{
+	if (m_new_bullet_this)
+		std::cout << "this" << std::endl;
+
+
+	//if (get_cpp_new_bullet_this() == 1)	// spawn new bullet
+	//{
+	//	Projectile* projectile = new Projectile(get_cpp_pos_this(), get_cpp_bullet_dir_this(), sf::Vector2f(10, 10));
+	//	m_bullet_vec.push_back(projectile);
+	//}
+
+	//for (size_t i = 0; i < m_bullet_vec.size();)
+	//{
+	//	m_bullet_vec.at(i)->update(deltaT, rWin);	// update 
+
+	//	if (m_bullet_vec.at(i)->destroy_self())	// destroy
+	//	{
+	//		SAFE_DEL(m_bullet_vec.at(i));
+	//		m_bullet_vec.erase(m_bullet_vec.begin());
+	//		continue;
+	//	}
+	//	i++;
+	//}
+
+	m_new_bullet_this = false;
+}
+
+
+// update
+void PlayerClient::update(sf::RenderWindow& rWin, const float deltaT)
+{
+	set_shape_pos(get_cpp_pos_this());
+	set_health(get_cpp_health_this());
+
+	update_projectiles(rWin, deltaT);
+}
+
+
+
+
+
+
+
+
+
 // shoot
 //void PlayerClient::shoot_input(sf::RenderWindow& rWin)
 //{
@@ -76,30 +123,3 @@ void PlayerClient::reset_player_input()
 //		m_is_shooting = false;
 //	}
 //}
-
-
-// update
-void PlayerClient::update(const float deltaT, sf::RenderWindow& rWin)
-{
-	set_shape_pos(get_cpp_server_pos_this());
-	set_health(get_cpp_server_health_this());
-
-
-
-	// projectiles
-	//for (size_t i = 0; i < get_projectiles_vec().size();)
-	//{
-	//	get_projectiles_vec().at(i)->update(deltaT, rWin);
-	//
-	//	// destroy
-	//	if (get_projectiles_vec().at(i)->destroy_self())
-	//	{
-	//		SAFE_DEL(get_projectiles_vec().at(i));
-	//		get_projectiles_vec().erase(get_projectiles_vec().begin());
-	//		continue;
-	//	}
-
-	//	i++;
-	//}
-}
-

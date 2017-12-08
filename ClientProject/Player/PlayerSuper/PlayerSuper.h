@@ -19,8 +19,6 @@ using Cpp =			ClientPlayerPacket;
 using BulletVec =	std::vector<Projectile*>;
 // const
 const float SPEED_BASE = 350;
-const float SPEED_DASH = SPEED_BASE * 1.5;
-const float SPEED_MAX = SPEED_BASE * SPEED_DASH;
 
 
 class PlayerSuper
@@ -33,12 +31,15 @@ public:
 
 	void				set_shape_pos(const sf::Vector2f& newPos);
 	void				set_health(const float newHealth);
+
 	void				update_packet_input(std::vector<int>& input, sf::RenderWindow& rWin, const float deltaT);
 
-	sf::Vector2f		get_cpp_server_pos_this();
-	sf::Vector2f		get_cpp_server_pos_other();
-	float				get_cpp_server_health_this();
-	float				get_cpp_server_health_other();
+	sf::Vector2f		get_cpp_pos_this();
+	sf::Vector2f		get_cpp_pos_other();
+	float				get_cpp_health_this();
+	float				get_cpp_health_other();
+	sf::Vector2f		get_cpp_bullet_dir_this();
+	sf::Vector2f		get_cpp_bullet_dir_other();
 
 	sf::Packet*			get_packet();
 	void				set_packet(sf::Packet& packet);
@@ -56,4 +57,7 @@ protected:
 
 	static Cpp*			m_cpp;
 	BulletVec			m_bullet_vec;
+
+	static bool			m_new_bullet_this,
+						m_new_bullet_other;
 };

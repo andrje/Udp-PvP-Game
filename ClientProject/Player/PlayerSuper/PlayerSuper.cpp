@@ -9,6 +9,8 @@
 
 // static init
 Cpp* PlayerSuper::m_cpp = new Cpp();
+bool PlayerSuper::m_new_bullet_this = false;
+bool PlayerSuper::m_new_bullet_other = false;
 
 
 // cTor
@@ -53,13 +55,6 @@ void PlayerSuper::set_health(const float newHealth)
 }
 
 
-// get projectiles vec
-//ProjectilesVec& PlayerSuper::get_projectiles_vec()
-//{
-//	return m_projectiles_vec;
-//}
-
-
 // update packet input
 void PlayerSuper::update_packet_input(std::vector<int>& input, sf::RenderWindow& rWin, const float deltaT)
 {
@@ -74,30 +69,44 @@ void PlayerSuper::update_packet_input(std::vector<int>& input, sf::RenderWindow&
 
 
 // get cpp pos this
-sf::Vector2f PlayerSuper::get_cpp_server_pos_this()
+sf::Vector2f PlayerSuper::get_cpp_pos_this()
 {
 	return m_cpp->m_player_pos_this;
 }
 
 
 // get cpp pos other
-sf::Vector2f PlayerSuper::get_cpp_server_pos_other()
+sf::Vector2f PlayerSuper::get_cpp_pos_other()
 {
 	return m_cpp->m_player_pos_other;
 }
 
 
 // get cpp health this
-float PlayerSuper::get_cpp_server_health_this()
+float PlayerSuper::get_cpp_health_this()
 {
 	return m_cpp->m_health_this;
 }
 
 
 // get cpp health other
-float PlayerSuper::get_cpp_server_health_other()
+float PlayerSuper::get_cpp_health_other()
 {
 	return m_cpp->m_health_other;
+}
+
+
+// get cpp server bullet dir this
+sf::Vector2f PlayerSuper::get_cpp_bullet_dir_this()
+{
+	return m_cpp->m_bullet_dir_this;
+}
+
+
+// get cpp server bullet dir other
+sf::Vector2f PlayerSuper::get_cpp_bullet_dir_other()
+{
+	return m_cpp->m_bullet_dir_other;
 }
 
 
@@ -115,9 +124,12 @@ sf::Packet* PlayerSuper::get_packet()
 void PlayerSuper::set_packet(sf::Packet& packet)
 {
 	packet >> *m_cpp;
-	
-	/*if(m_cpp->m_new_bullet_this)
-		std::cout << m_cpp->m_bullet_dir_this.x << std::endl;*/
+
+	if (m_cpp->m_new_bullet_this == 1)
+		m_new_bullet_this = true;
+
+	if (m_cpp->m_new_bullet_other == 1)
+		m_new_bullet_other = true;
 }
 
 

@@ -163,7 +163,7 @@ void Server::init_game()
 {
 	std::cout << "Completing start game countdown" << std::endl;
 
-	int count = 3;
+	int count = 1;
 	std::string message = "3";
 	m_clock->restart();
 

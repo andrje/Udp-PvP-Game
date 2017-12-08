@@ -14,7 +14,8 @@ public:
 	void		get_player_input(const float deltaT, sf::RenderWindow& rWin);
 	void		reset_player_input();
 
-	void		update(const float deltaT, sf::RenderWindow& rWin);
+	void		update_projectiles(sf::RenderWindow& rWin, const float deltaT);
+	void		update(sf::RenderWindow& rWin, const float deltaT);
 
 private:
 	std::vector<int>	m_input_vec;

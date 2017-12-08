@@ -210,8 +210,8 @@ void Client::game()
 	{
 		m_render_win->clear(sf::Color::Cyan);
 
-		m_player_server->update();	// update openent
-		m_player_local->update(m_delta_t, *m_render_win);	// update local player
+		m_player_server->update(*m_render_win, m_delta_t);	// update oponent
+		m_player_local->update(*m_render_win, m_delta_t);	// update this player
 
 		m_player_server->render(*m_render_win);	// render
 		m_player_local->render(*m_render_win);

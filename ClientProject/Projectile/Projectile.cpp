@@ -9,21 +9,16 @@
 
 
 // cTor
-Projectile::Projectile(const sf::Vector2f& spawnPos,
-						const sf::Vector2f& mousePos,
-						const sf::Vector2f& size)
+Projectile::Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, const sf::Vector2f& size)
 	:
 	m_clock(new sf::Clock()),
 	m_max_life(4), m_bounces(0),
 	m_max_bounces(2),
 	m_destroy_self(false)
 {
-	m_rect_size = new sf::Vector2f(size);
-
 	m_pos = new sf::Vector2f(spawnPos);
-	m_dir = new sf::Vector2f(mousePos - spawnPos);
-
-	*m_dir /= std::sqrt(m_dir->x * m_dir->x + m_dir->y * m_dir->y);
+	*m_dir = dir;
+	m_rect_size = new sf::Vector2f(size);
 
 	m_rect_shape = new sf::RectangleShape(sf::Vector2f(*m_rect_size));
 	m_rect_shape->setOrigin(m_rect_size->x / 2, m_rect_size->y / 2);

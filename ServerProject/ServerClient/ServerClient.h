@@ -14,8 +14,6 @@ struct ServerPlayerPacket;
 using Spp = ServerPlayerPacket;
 // const
 const float SPEED_BASE = 350;
-const float SPEED_DASH = SPEED_BASE * 1.5;
-const float SPEED_MAX = SPEED_BASE * SPEED_DASH;
 
 
 class ServerClient
