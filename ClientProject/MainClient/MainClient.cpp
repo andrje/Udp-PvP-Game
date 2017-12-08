@@ -3,12 +3,10 @@
 #include "../Client/Client.h"
 
 
-
 int main()
 {
 	Client c;
-	c.run();
-	//c.func_print();
+	c.run_client();
 
 	while (true);
 }

@@ -10,7 +10,7 @@
 class Player;
 class Client;
 // const
-const float PROJECTILE_MAX_SPEED = 500;
+const float PROJECTILE_MAX_SPEED = 50000;
 
 
 class Projectile

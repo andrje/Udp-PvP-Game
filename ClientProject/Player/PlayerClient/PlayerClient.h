@@ -5,7 +5,6 @@
 // forward
 class Client;
 
-
 class PlayerClient : public PlayerSuper
 {
 public:

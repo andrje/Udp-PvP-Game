@@ -17,8 +17,6 @@ struct ClientPlayerPacket;
 // typedef
 using Cpp =			ClientPlayerPacket;
 using BulletVec =	std::vector<Projectile*>;
-// const
-const float SPEED_BASE = 350;
 
 
 class PlayerSuper
@@ -56,8 +54,8 @@ protected:
 	sf::Packet*			m_packet;
 
 	static Cpp*			m_cpp;
-	BulletVec			m_bullet_vec;
 
+	BulletVec			m_bullet_vec;
 	static bool			m_new_bullet_this,
 						m_new_bullet_other;
 };

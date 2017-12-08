@@ -60,30 +60,26 @@ void PlayerClient::reset_player_input()
 // handle bullets
 void PlayerClient::update_projectiles(sf::RenderWindow & rWin, const float deltaT)
 {
-	if (m_new_bullet_this)
-		std::cout << "this" << std::endl;
+	if (m_new_bullet_this)	// spawn new bullet
+	{
+		Projectile* projectile = new Projectile(get_cpp_pos_this(), get_cpp_bullet_dir_this(), sf::Vector2f(10, 10));
+		m_bullet_vec.push_back(projectile);
 
+		m_new_bullet_this = false;
+	}
 
-	//if (get_cpp_new_bullet_this() == 1)	// spawn new bullet
-	//{
-	//	Projectile* projectile = new Projectile(get_cpp_pos_this(), get_cpp_bullet_dir_this(), sf::Vector2f(10, 10));
-	//	m_bullet_vec.push_back(projectile);
-	//}
+	for (size_t i = 0; i < m_bullet_vec.size();)
+	{
+		m_bullet_vec.at(i)->update(deltaT, rWin);	// update 
 
-	//for (size_t i = 0; i < m_bullet_vec.size();)
-	//{
-	//	m_bullet_vec.at(i)->update(deltaT, rWin);	// update 
-
-	//	if (m_bullet_vec.at(i)->destroy_self())	// destroy
-	//	{
-	//		SAFE_DEL(m_bullet_vec.at(i));
-	//		m_bullet_vec.erase(m_bullet_vec.begin());
-	//		continue;
-	//	}
-	//	i++;
-	//}
-
-	m_new_bullet_this = false;
+		if (m_bullet_vec.at(i)->destroy_self())	// destroy
+		{
+			SAFE_DEL(m_bullet_vec.at(i));
+			m_bullet_vec.erase(m_bullet_vec.begin());
+			continue;
+		}
+		i++;
+	}
 }
 
 

@@ -145,37 +145,6 @@ void Client::check_update_time(const float tickRate, const float frameRate)
 }
 
 
-// update
-void Client::run()
-{
-	m_clock->restart();
-	m_last_t = m_clock->getElapsedTime().asSeconds();
-
-	init_connect();
-
-	while (m_render_win->isOpen())
-	{
-		m_first_t = m_clock->getElapsedTime().asSeconds();
-		m_delta_t += m_first_t - m_last_t;
-
-		// sf::Event
-		event_handler();
-
-		// get if/what to update
-		check_update_time(m_tickrate, m_framerate);
-
-		// run current state
-		m_funcptr_vec[m_player_local->get_current_state()](*this);
-
-		// update network
-		send_packet();
-		receive_packet();
-
-		m_last_t = m_clock->getElapsedTime().asSeconds();
-	}
-}
-
-
 // start
 void Client::start()
 {
@@ -249,6 +218,35 @@ void Client::event_handler()
 }
 
 
+// run client
+void Client::run_client()
+{
+	m_clock->restart();
+	m_last_t = m_clock->getElapsedTime().asSeconds();
+
+	init_connect();
+
+	while (m_render_win->isOpen())
+	{
+		m_first_t = m_clock->getElapsedTime().asSeconds();
+		m_delta_t += m_first_t - m_last_t;
+
+		// sf::Event
+		event_handler();
+
+		// get if/what to update
+		check_update_time(m_tickrate, m_framerate);
+
+		// run current state
+		m_funcptr_vec[m_player_local->get_current_state()](*this);
+
+		// update network
+		send_packet();
+		receive_packet();
+
+		m_last_t = m_clock->getElapsedTime().asSeconds();
+	}
+}
 
 
 

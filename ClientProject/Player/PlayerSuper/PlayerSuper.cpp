@@ -1,9 +1,9 @@
 #include "PlayerSuper.h"
 
 #include "SFML/Window/Mouse.hpp"
+#include "../../Projectile/Projectile.h"
 
 // forward
-#include "../../Projectile/Projectile.h"
 #include "../../ClientPlayerPacket/ClientPlayerPacket.h"
 
 

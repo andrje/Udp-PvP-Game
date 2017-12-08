@@ -13,16 +13,12 @@ PlayerServer::PlayerServer()
 // update projectiles
 void PlayerServer::update_projectiles(sf::RenderWindow & rWin, const float deltaT)
 {
-	if (m_new_bullet_other)
-		std::cout << "other" << std::endl;
-	
-
-	//if (get_cpp_new_bullet_other() == 1)	// spawn new bullet
+	//if (m_new_bullet_other)	// spawn new bullet
 	//{
 	//	Projectile* projectile = new Projectile(get_cpp_pos_other(), get_cpp_bullet_dir_other(), sf::Vector2f(10, 10));
 	//	m_bullet_vec.push_back(projectile);
 
-	//	std::cout << 23 << std::endl;
+	//	m_new_bullet_other = false;
 	//}
 
 
@@ -38,8 +34,6 @@ void PlayerServer::update_projectiles(sf::RenderWindow & rWin, const float delta
 	//	}
 	//	i++;
 	//}
-
-	m_new_bullet_other = false;
 }
 
 

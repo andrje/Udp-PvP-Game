@@ -13,7 +13,7 @@ struct ServerPlayerPacket;
 // typedef
 using Spp = ServerPlayerPacket;
 // const
-const float SPEED_BASE = 350;
+const float SPEED_BASE = 1000;
 
 
 class ServerClient

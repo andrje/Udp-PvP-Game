@@ -27,7 +27,6 @@ public:
 	void		packet_status(const char socketTransferType, sf::Socket::Status& status);
 
 	void		check_update_time(const float tickRate, const float frameRate);
-	void		run();
 
 	void		start();
 	void		game();
@@ -35,6 +34,9 @@ public:
 	void		idle();
 
 	void		event_handler();
+
+	void		run_client();
+
 
 private:
 	sf::UdpSocket*		m_socket;

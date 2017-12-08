@@ -17,7 +17,7 @@ Projectile::Projectile(const sf::Vector2f& spawnPos, const sf::Vector2f& dir, co
 	m_destroy_self(false)
 {
 	m_pos = new sf::Vector2f(spawnPos);
-	*m_dir = dir;
+	m_dir = new sf::Vector2f(dir);
 	m_rect_size = new sf::Vector2f(size);
 
 	m_rect_shape = new sf::RectangleShape(sf::Vector2f(*m_rect_size));
