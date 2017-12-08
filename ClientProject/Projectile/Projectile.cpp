@@ -73,7 +73,7 @@ const void Projectile::bounce(sf::RenderWindow& rWin)
 const bool Projectile::is_hit()
 {
 	sf::Vector2u mid(m_player_pos->x, m_player_pos->y);	// range based hit detction
-	int half, upper, downer, righter, lefter;
+	int upper, downer, righter, lefter;
 
 	upper = mid.y - m_player_half;
 	downer = mid.y + m_player_half;
