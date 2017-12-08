@@ -33,8 +33,6 @@ Projectile::~Projectile()
 	SAFE_DEL(m_rect_shape);		SAFE_DEL(m_rect_size);
 	SAFE_DEL(m_dir);			SAFE_DEL(m_pos);
 	SAFE_DEL(m_clock);
-
-	//std::cout << "Projectile dTor" << std::endl;
 }
 
 

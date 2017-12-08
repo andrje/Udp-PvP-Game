@@ -1,6 +1,6 @@
-#include "ServerClient.h"
-
 #include <iostream>	// delete when final
+
+#include "ServerClient.h"
 
 // forward
 #include "../ServerPlayerPacket/ServerPlayerPacket.h"
@@ -122,16 +122,16 @@ void ServerClient::update_bullet()
 
 	if (m_spp->m_new_bullet_this == 1)
 	{
-		sf::Vector2f tmp_bullet_dir;	// because of sf::mouse is vector2i, and has no overload for vector2f
-		tmp_bullet_dir.x = m_spp->m_mouse_pos_this.x;
-		tmp_bullet_dir.y = m_spp->m_mouse_pos_this.y;
+		sf::Vector2f tmp_mouse;	// because of sf::mouse is vector2i, and has no overload for vector2f
+		tmp_mouse.x = m_spp->m_mouse_pos_this.x;
+		tmp_mouse.y = m_spp->m_mouse_pos_this.y;
 
-		sf::Vector2f tmp_dir = tmp_bullet_dir - m_spp->m_player_pos_this;
+		sf::Vector2f tmp_dir = tmp_mouse - m_spp->m_player_pos_this;
 
-		if (tmp_bullet_dir.x != 0 && tmp_bullet_dir.y != 0)
-			tmp_bullet_dir /= std::sqrt(tmp_bullet_dir.x * tmp_bullet_dir.x + tmp_bullet_dir.y * tmp_bullet_dir.y);
+		if (tmp_dir.x != 0 && tmp_dir.y != 0)
+			tmp_dir /= std::sqrt(tmp_dir.x * tmp_dir.x + tmp_dir.y * tmp_dir.y);
 
-		m_spp->m_bullet_dir_this = tmp_bullet_dir;
+		m_spp->m_bullet_dir_this = tmp_dir;
 	}
 }
 
